@@ -8,13 +8,21 @@ window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Among Us")
 clock = pygame.time.Clock()
 
-cafeteria = pygame.image.load("amongUs_caf.PNG") 
+cafeteria = pygame.image.load(r"C:\Users\kidmu\Among-US\images\amongUs_caf.PNG") 
 cafeteria = pygame.transform.scale(cafeteria, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-yellow_crew = pygame.image.load("amongus_yellow_char-Picsart-BackgroundRemover.jpeg").convert_alpha()
+yellow_crew = pygame.image.load(r"C:\Users\kidmu\Among-US\images\amongUs_yellowCrew.jpeg")
 yellow_crew = pygame.transform.scale(yellow_crew, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 
-crew_sprite_sheet = None 
+crew_walk1 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk1.png") 
+crew_walk2 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk2.png")
+crew_walk3 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk3.png") 
+crew_walk4 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk4.png") 
+crew_walk5 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk5.png") 
+crew_walk6 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk6.png") 
+crew_walk7 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk7.png")
+
+walking_sprites = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
 
 obstacles = [] 
 
