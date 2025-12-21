@@ -22,6 +22,15 @@ crew_walk5 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk5.png")
 crew_walk6 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk6.png") 
 crew_walk7 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk7.png")
 
+# squishing down images to scale 
+crew_walk1 = pygame.transform.scale(crew_walk1, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+crew_walk2 = pygame.transform.scale(crew_walk2, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15)) 
+crew_walk3 = pygame.transform.scale(crew_walk3, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15)) 
+crew_walk4 = pygame.transform.scale(crew_walk4, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+crew_walk5 = pygame.transform.scale(crew_walk5, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+crew_walk6 = pygame.transform.scale(crew_walk6, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+crew_walk7 = pygame.transform.scale(crew_walk7, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15)) 
+
 walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
 walking_left = [pygame.transform.flip(sprite, True, False) for sprite in walking_right]
 
@@ -50,7 +59,7 @@ class Obstacle():
 
 """ the next step is to work on crewmate movement animation"""
 class CrewMate(): 
-    def __init__(self, crew_img, x, y, width, height, speed=2, killed=False): 
+    def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, speed=2, killed=False): 
         self.crew = crew_img 
         self.x = x 
         self.y = y 
@@ -60,16 +69,18 @@ class CrewMate():
         self.killed = killed 
         self.crew_rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
-        #crewmate collision properties 
+        # crewmate collision properties 
         self.radius = self.width / 2 
         self.center_x = self.x + self.width / 2 
         self.center_y = self.y + self.height / 2 
 
-        #attributes for walking animation
-        self.walk_right = None 
-        self.walk_left = None 
-        self.walk_up = None 
-        self.walk_down = None 
+        # attributes for walking animation
+        self.walk_right = walk_right 
+        self.walk_left = walk_left
+        
+        self.walk_up = self.walk_right
+        self.walk_down = self.walk_left 
+        
         self.current_frame = 0 
         self.animation_speed = 0.2 
 
@@ -94,12 +105,15 @@ class CrewMate():
         # set current image based on direction
         if self.direction == "right": 
             self.crew = self.walk_right[self.current_frame]
+        
         elif self.direction == "left": 
             self.crew = self.walk_left[self.current_frame]
+        
         elif self.direction == "up": 
-            return None 
+            self.crew = self.walk_right[self.current_frame]
+        
         elif self.direction == "down": 
-            return None 
+            self.crew = self.walk_left[self.current_frame] 
 
     
     # check for whether crewmate is colliding with other objects 
@@ -119,18 +133,29 @@ class CrewMate():
         if keys[pygame.K_w]:
             # move upwards 
             self.y -= self.speed
+            self.direction = "up"
+            self.is_moving = True 
        
         if keys[pygame.K_a]: 
             # move to the left 
             self.x -= self.speed 
+            self.direction = "left"
+            self.is_moving = True 
         
         if keys[pygame.K_s]: 
             #move downwards 
             self.y += self.speed
+            self.direction = "down"
+            self.is_moving = True 
         
         if keys[pygame.K_d]:  
             #move to the right
             self.x += self.speed
+            self.direction = "right"
+            self.is_moving = True 
+
+        # update animation
+        self.update_animation() 
 
         # update center after movement 
         self.center_x = self.x + self.width / 2 
@@ -173,7 +198,7 @@ class Impostor():
 
 table_radius = 50
     
-yellow_crew = CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17) 
+yellow_crew = CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, walking_right, walking_left) 
 
 upper_right_table = Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
