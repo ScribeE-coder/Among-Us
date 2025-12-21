@@ -152,10 +152,12 @@ class CrewMate():
             #move to the right
             self.x += self.speed
             self.direction = "right"
-            self.is_moving = True 
+            self.is_moving = True   
 
         # update animation
-        self.update_animation() 
+        if self.is_moving:
+            self.update_animation() 
+
 
         # update center after movement 
         self.center_x = self.x + self.width / 2 
@@ -169,6 +171,9 @@ class CrewMate():
             # update center after moving backwards 
             self.center_x = self.x + self.width / 2 
             self.center_y = self.y + self.height / 2
+
+        # need to reassign self.moving back to False to stop continuous movement
+        self.is_moving = False 
         
     def crew_draw(self): 
         window.blit(self.crew, (self.x, self.y))
