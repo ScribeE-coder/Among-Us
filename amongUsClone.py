@@ -1,4 +1,4 @@
-import pygame, math 
+import pygame, math, os 
 
 SCREEN_WIDTH = 640 
 SCREEN_HEIGHT = 640 
@@ -22,7 +22,14 @@ crew_walk5 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk5.png")
 crew_walk6 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk6.png") 
 crew_walk7 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk7.png")
 
-walking_sprites = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
+walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
+walking_left = [pygame.transform.flip(sprite, True, False) for sprite in walking_right]
+
+# walking up and down mechanics only needed for other maps not current one 
+walk_up = None 
+walk_down = None
+
+impostor = None 
 
 obstacles = [] 
 
@@ -57,10 +64,46 @@ class CrewMate():
         self.radius = self.width / 2 
         self.center_x = self.x + self.width / 2 
         self.center_y = self.y + self.height / 2 
+
+        #attributes for walking animation
+        self.walk_right = None 
+        self.walk_left = None 
+        self.walk_up = None 
+        self.walk_down = None 
+        self.current_frame = 0 
+        self.animation_speed = 0.2 
+
+        # timer that keeps track of when pygame started up (in miliseconds)
+        self.last_update = pygame.time.get_ticks() 
+
+        # direction tracking
+        self.direction = "right"
+        self.is_moving = False 
+
+    def update_animation(self): 
+        now = pygame.time.get_ticks()
+
+        if self.is_moving: 
+            if now - self.last_update > 100: # 100 ms = 10 frames per second  
+                self.last_update = now 
+                self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
+        
+        """ self.current_frame + 1 moves to next frame in sequence % len(self.walk_right) ensures we loop back to 
+        0 when we reach the end of the list no index range errors"""
+
+        # set current image based on direction
+        if self.direction == "right": 
+            self.crew = self.walk_right[self.current_frame]
+        elif self.direction == "left": 
+            self.crew = self.walk_left[self.current_frame]
+        elif self.direction == "up": 
+            return None 
+        elif self.direction == "down": 
+            return None 
+
     
     # check for whether crewmate is colliding with other objects 
     def collision_table_check(self, obstacles):
-        
         for object in obstacles: 
             # calculating distance between centers 
             distance = math.sqrt((self.center_x - object.center_x ) ** 2 + (self.center_y - object.center_y) ** 2) 
@@ -117,8 +160,16 @@ class Impostor():
     def imp_move(self): 
         return None 
     
+    #checks whether imp is close enough to crew to kill 
+    def crew_proximity_check(self): 
+        return False 
+    
+    # if close to crewmate, kill mechanism otherwise do nothing 
     def kill(self): 
-        return None 
+        if self.crew_proximity_check(): 
+            return None 
+        else: 
+            return None  
 
 table_radius = 50
     
