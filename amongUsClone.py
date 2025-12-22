@@ -31,12 +31,8 @@ crew_walk5 = pygame.transform.scale(crew_walk5, (SCREEN_WIDTH/15, SCREEN_HEIGHT/
 crew_walk6 = pygame.transform.scale(crew_walk6, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 crew_walk7 = pygame.transform.scale(crew_walk7, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15)) 
 
-walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
-walking_left = [pygame.transform.flip(sprite, True, False) for sprite in walking_right]
-
-# walking up and down mechanics only needed for other maps not current one 
-walk_up = None 
-walk_down = None
+crew_walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
+crew_walking_left = [pygame.transform.flip(sprite, True, False) for sprite in crew_walking_right]
 
 impostor = None 
 
@@ -57,10 +53,10 @@ class Obstacle():
         self.center_x = self.x 
         self.center_y = self.y       
 
-""" the next step is to work on crewmate movement animation"""
 class CrewMate(): 
     def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, speed=2, killed=False): 
         self.crew = crew_img 
+        self.stationary_crew = crew_img # need this so animation cycle doesn't freeze mid sprite when no movement detected
         self.x = x 
         self.y = y 
         self.width = width 
@@ -88,7 +84,7 @@ class CrewMate():
         self.last_update = pygame.time.get_ticks() 
 
         # direction tracking
-        self.direction = "right"
+        self.direction = None 
         self.is_moving = False 
 
     def update_animation(self): 
@@ -114,7 +110,6 @@ class CrewMate():
         
         elif self.direction == "down": 
             self.crew = self.walk_left[self.current_frame] 
-
     
     # check for whether crewmate is colliding with other objects 
     def collision_table_check(self, obstacles):
@@ -124,9 +119,12 @@ class CrewMate():
 
             # collision detected 
             if distance < (self.radius + object.radius): 
-                return True      
+                return True 
+        else: 
+            return False      
     
     def crew_move(self, keys): 
+        self.is_moving = False
         old_x = self.x  
         old_y = self.y 
 
@@ -156,8 +154,10 @@ class CrewMate():
 
         # update animation
         if self.is_moving:
-            self.update_animation() 
+            self.update_animation()  
 
+        else: 
+            self.crew = self.stationary_crew 
 
         # update center after movement 
         self.center_x = self.x + self.width / 2 
@@ -171,14 +171,12 @@ class CrewMate():
             # update center after moving backwards 
             self.center_x = self.x + self.width / 2 
             self.center_y = self.y + self.height / 2
-
-        # need to reassign self.moving back to False to stop continuous movement
-        self.is_moving = False 
+        
         
     def crew_draw(self): 
         window.blit(self.crew, (self.x, self.y))
 
-# will work on later 
+ 
 class Impostor(): 
     def __init__(self, imp_img, x, y, width, height, speed=2): 
         self.imp_img = imp_img 
@@ -203,7 +201,7 @@ class Impostor():
 
 table_radius = 50
     
-yellow_crew = CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, walking_right, walking_left) 
+yellow_crew = CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left) 
 
 upper_right_table = Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
