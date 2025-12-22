@@ -91,8 +91,9 @@ tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_tab
 for table in tables: 
     obstacles.append(table)
 
+# will need to be optimized later creating hundreds of obstacles not ideal as map includes other rooms 
 for x in range(129, 469):
-    obstacles.append(Obstacle.Obstacle(x, 48, 1))
+    obstacles.append(Obstacle.Obstacle(x, 48, 0))
 
  # put your images on your created display    
 def draw(): 

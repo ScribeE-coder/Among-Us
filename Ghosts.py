@@ -1,13 +1,17 @@
 import pygame 
 
 class Ghost: 
-    def __init__(self, ghost_type, x, y, has_tasks:bool): 
+    def __init__(self, ghost_type, x, y, tasks:list): 
         self.ghost_type = ghost_type
         self.x = x 
         self.y = y
         self.width = 0 
         self.height = 0  
-        self.has_tasks = has_tasks 
+        self.tasks = tasks 
+        self.has_tasks = True 
+
+        if not self.tasks: 
+            self.has_tasks = False
 
         pygame.Rect(self.x, self.y, self.width, self.height) 
 
@@ -23,3 +27,10 @@ class Ghost:
         
         if keys[pygame.K_d]: 
             self.x += 1 
+
+    # if ghost still has tasks those tasks should still be displayed 
+    def display_tasks(self): 
+        if self.has_tasks: 
+            return True 
+        else: 
+            return False 

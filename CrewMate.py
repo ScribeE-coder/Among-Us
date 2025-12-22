@@ -37,6 +37,9 @@ class CrewMate():
         self.obstacles = obstacles 
         self.window = window
 
+        self.tasks = [] 
+        self.has_tasks = True 
+
     def update_animation(self): 
         now = pygame.time.get_ticks()
 
@@ -120,7 +123,13 @@ class CrewMate():
 
             # update center after moving backwards 
             self.center_x = self.x + self.width / 2 
-            self.center_y = self.y + self.height / 2    
+            self.center_y = self.y + self.height / 2  
+
+    def display_tasks(): 
+        return None
+
+    def update_tasks(): 
+        return None 
         
     def crew_draw(self): 
         self.window.blit(self.crew, (self.x, self.y))
