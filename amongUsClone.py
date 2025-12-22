@@ -5,7 +5,7 @@ SCREEN_HEIGHT = 640
 
 pygame.init()
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Among Us")
+pygame.display.set_caption("Among Us Clone")
 clock = pygame.time.Clock()
 
 cafeteria = pygame.image.load("images/amongUs_caf.PNG") 
@@ -138,7 +138,7 @@ class CrewMate():
             self.crew = self.walk_left[self.current_frame] 
     
     # check for whether crewmate is colliding with other objects 
-    def collision_table_check(self, obstacles):
+    def collision_check(self, obstacles):
         for object in obstacles: 
             # calculating distance between centers 
             distance = math.sqrt((self.center_x - object.center_x ) ** 2 + (self.center_y - object.center_y) ** 2) 
@@ -190,7 +190,7 @@ class CrewMate():
         self.center_y = self.y + self.height / 2 
 
         # collision check after movement 
-        if self.collision_table_check(obstacles): 
+        if self.collision_check(obstacles): 
             self.x = old_x
             self.y = old_y 
 
@@ -200,7 +200,6 @@ class CrewMate():
         
     def crew_draw(self): 
         window.blit(self.crew, (self.x, self.y))
-
 
 # walking right and left defaulted to None for now working on monster transform
 class Impostor(): 
@@ -228,21 +227,24 @@ class Impostor():
         self.animation_frame_count = 0 
 
     def monster_transform(self): 
+        if self.animation_complete: 
+            return 
+
+        if not self.animation_playing: 
+            self
+        
         now = pygame.time.get_ticks() 
         
         if now - self.last_update > 100:  
                 self.last_update = now 
                 self.current_frame = (self.current_frame + 1) % len(self.monster_transform_list)
 
-        pygame.time.wait(150) 
         self.imp = self.monster_transform_list[self.current_frame]
-
     
     def imp_move(self, keys): 
         self.monster_transform()
-        return None 
     
-    def collision_table_check(self): 
+    def collision_check(self): 
         return None 
     
     #checks whether imp is close enough to crew to kill 
@@ -280,6 +282,7 @@ bottom_right_table = Obstacle(centers.get("bottom_right")[0], centers.get("botto
 bottom_left_table = Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius) 
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table] 
+
 for table in tables: 
     obstacles.append(table)
  
@@ -298,6 +301,9 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             running = False
+
+        if pygame.MOUSEBUTTONDOWN: 
+            pygame   
 
     yellow_crew.crew_move(keys) 
     monster_imp.imp_move(keys)
