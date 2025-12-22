@@ -219,8 +219,15 @@ class Impostor():
         self.walk_left = walk_left
         self.walk_up = self.walk_right 
         self.walk_down = self.walk_left 
+
         self.current_frame = 0 
-        
+        self.last_update = pygame.time.get_ticks() 
+        self.animation_playing = False 
+        self.animation_complete = False 
+        self.animation_frame_count = 0 
+
+    def start_animation(self): 
+        self.current_frame = 0 
         self.last_update = pygame.time.get_ticks() 
         self.animation_playing = False 
         self.animation_complete = False 
@@ -231,21 +238,32 @@ class Impostor():
             return 
 
         if not self.animation_playing: 
-            self
+            self.animation_playing = True 
         
         now = pygame.time.get_ticks() 
         
         if now - self.last_update > 100:  
                 self.last_update = now 
                 self.current_frame = (self.current_frame + 1) % len(self.monster_transform_list)
+                self.animation_frame_count += 1 
 
+        #checking if we've shown all frames 
+        if self.animation_frame_count >= len(self.monster_transform_list): 
+            self.animation_complete = True 
+            self.animation_playing = False 
+            self.current_frame = 0 
+            self.imp = self.monster_transform_list[self.current_frame] 
+        
         self.imp = self.monster_transform_list[self.current_frame]
     
-    def imp_move(self, keys): 
+    def imp_move(self, keys):
+        if keys[pygame.K_t] and not self.animation_complete: 
+            self.start_animation()
         self.monster_transform()
+
     
     def collision_check(self): 
-        return None 
+        return False 
     
     #checks whether imp is close enough to crew to kill 
     def crew_proximity_check(self, crew: CrewMate): 
