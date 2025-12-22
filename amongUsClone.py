@@ -253,7 +253,15 @@ class Impostor():
         self.monster_animation()
     
     def imp_move(self, keys):
-        return
+        if keys[pygame.K_UP]: 
+            self.y -= 1 
+        
+        if keys[pygame.K_DOWN]: 
+            self.y += 1 
+        
+        if keys[pygame.K_RIGHT]: 
+            self.x += 1 
+
             
     def collision_check(self): 
         return False 
