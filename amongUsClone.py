@@ -34,8 +34,35 @@ crew_walk7 = pygame.transform.scale(crew_walk7, (SCREEN_WIDTH/15, SCREEN_HEIGHT/
 crew_walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
 crew_walking_left = [pygame.transform.flip(sprite, True, False) for sprite in crew_walking_right]
 
-impostor = None 
+impTransform1 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform1.png")
+impTransform2 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform2.png")
+impTransform3 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform3.png")
+impTransform4 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform4.png")
+impTransform5 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform5.png")
+impTransform6 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform6.png")
+impTransform7 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform7.png")
+impTransform8 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform8.png")
+impTransform9 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform9.png")
+impTransform10 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform10.png")
+impTransform11 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform11.png")
+impTransform12 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform12.png")
+impTransform13 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform13.png")
 
+impTransform1 = pygame.transform.scale(impTransform1, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform2 = pygame.transform.scale(impTransform2, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform3 = pygame.transform.scale(impTransform3, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform4 = pygame.transform.scale(impTransform4, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform5 = pygame.transform.scale(impTransform5, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform6 = pygame.transform.scale(impTransform6, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform7 = pygame.transform.scale(impTransform7, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform8 = pygame.transform.scale(impTransform8, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform9 = pygame.transform.scale(impTransform9, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform10 = pygame.transform.scale(impTransform10, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform11 = pygame.transform.scale(impTransform11, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform12 = pygame.transform.scale(impTransform12, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+impTransform13 = pygame.transform.scale(impTransform13, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+
+imp_transform_list = [impTransform1, impTransform2, impTransform3, impTransform4, impTransform5, impTransform6, impTransform7, impTransform8, impTransform9, impTransform10, impTransform11, impTransform12, impTransform13]
 obstacles = [] 
 
 centers = {"upper_right": (443, 180), 
@@ -170,29 +197,53 @@ class CrewMate():
 
             # update center after moving backwards 
             self.center_x = self.x + self.width / 2 
-            self.center_y = self.y + self.height / 2  
-
-    def collision_table_check(): 
-        return None   
+            self.center_y = self.y + self.height / 2    
         
     def crew_draw(self): 
         window.blit(self.crew, (self.x, self.y))
- 
+
+
+# walking right and left defaulted to None for now working on monster transform
 class Impostor(): 
-    def __init__(self, imp_img, x, y, width, height, speed=2): 
-        self.imp = self.imp_img 
+    def __init__(self, imp_img, x, y, width, height, monster_transform_list, walk_right=None, walk_left=None, speed=2): 
+        self.imp = imp_img 
         self.x = x 
         self.y = y 
         self.width = width 
         self.height = height
         self.speed = speed 
         self.has_killed = False 
+        self.monster_transform_list = monster_transform_list
         self.imp_rect = pygame.Rect(self.x, self.y, self.width, self.height) 
 
-    def monster_transform(self): 
-        return None 
+        # attributes for walking animation
+        self.walk_right = walk_right 
+        self.walk_left = walk_left
+        self.walk_up = self.walk_right 
+        self.walk_down = self.walk_left 
+        self.current_frame = 0 
+        
+        self.last_update = pygame.time.get_ticks() 
+        self.animation_playing = False 
+        self.animation_complete = False 
+        self.animation_frame_count = 0 
 
-    def imp_move(self): 
+    def monster_transform(self): 
+        now = pygame.time.get_ticks() 
+        
+        if now - self.last_update > 100:  
+                self.last_update = now 
+                self.current_frame = (self.current_frame + 1) % len(self.monster_transform_list)
+
+        pygame.time.wait(150) 
+        self.imp = self.monster_transform_list[self.current_frame]
+
+    
+    def imp_move(self, keys): 
+        self.monster_transform()
+        return None 
+    
+    def collision_table_check(self): 
         return None 
     
     #checks whether imp is close enough to crew to kill 
@@ -221,6 +272,8 @@ table_radius = 50
     
 yellow_crew = CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left) 
 
+monster_imp = Impostor(imp_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, imp_transform_list)
+
 upper_right_table = Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
 upper_left_table = Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius)
@@ -235,6 +288,7 @@ for table in tables:
 def draw(): 
     window.blit(cafeteria, (0, 0))
     yellow_crew.crew_draw() 
+    monster_imp.draw()
 
 running = True 
 
@@ -247,6 +301,7 @@ while running:
             running = False
 
     yellow_crew.crew_move(keys) 
+    monster_imp.imp_move(keys)
     draw()
     pygame.display.update()
     clock.tick(60) 
