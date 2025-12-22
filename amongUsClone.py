@@ -226,14 +226,7 @@ class Impostor():
         self.animation_complete = False 
         self.animation_frame_count = 0 
 
-    def start_animation(self): 
-        self.current_frame = 0 
-        self.last_update = pygame.time.get_ticks() 
-        self.animation_playing = False 
-        self.animation_complete = False 
-        self.animation_frame_count = 0 
-
-    def monster_transform(self): 
+    def monster_animation(self): 
         if self.animation_complete: 
             return 
 
@@ -255,13 +248,13 @@ class Impostor():
             self.imp = self.monster_transform_list[self.current_frame] 
         
         self.imp = self.monster_transform_list[self.current_frame]
+
+    def monster_transform(self): 
+        self.monster_animation()
     
     def imp_move(self, keys):
-        if keys[pygame.K_t] and not self.animation_complete: 
-            self.start_animation()
-        self.monster_transform()
-
-    
+        return
+            
     def collision_check(self): 
         return False 
     
@@ -313,18 +306,26 @@ def draw():
 running = True 
 
 while running: 
-    # keys = list of all possible keys that can be pressed on the keyboard 
     keys = pygame.key.get_pressed()
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             running = False
+        
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_t:
+                # Reset and start animation
+                monster_imp.animation_complete = False
+                monster_imp.animation_playing = True
+                monster_imp.current_frame = 0
+                monster_imp.animation_frame_count = 0
 
-        if pygame.MOUSEBUTTONDOWN: 
-            pygame   
+    # Update animation if it's playing
+    if monster_imp.animation_playing:
+        monster_imp.monster_transform()
 
     yellow_crew.crew_move(keys) 
     monster_imp.imp_move(keys)
     draw()
     pygame.display.update()
-    clock.tick(60) 
+    clock.tick(60)
