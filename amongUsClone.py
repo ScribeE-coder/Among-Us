@@ -170,34 +170,52 @@ class CrewMate():
 
             # update center after moving backwards 
             self.center_x = self.x + self.width / 2 
-            self.center_y = self.y + self.height / 2
-        
+            self.center_y = self.y + self.height / 2  
+
+    def collision_table_check(): 
+        return None   
         
     def crew_draw(self): 
         window.blit(self.crew, (self.x, self.y))
-
  
 class Impostor(): 
     def __init__(self, imp_img, x, y, width, height, speed=2): 
-        self.imp_img = imp_img 
+        self.imp = self.imp_img 
         self.x = x 
         self.y = y 
         self.width = width 
         self.height = height
+        self.speed = speed 
+        self.has_killed = False 
+        self.imp_rect = pygame.Rect(self.x, self.y, self.width, self.height) 
+
+    def monster_transform(self): 
+        return None 
 
     def imp_move(self): 
         return None 
     
     #checks whether imp is close enough to crew to kill 
-    def crew_proximity_check(self): 
-        return False 
+    def crew_proximity_check(self, crew: CrewMate): 
+        prox_range_x = None 
+        prox_range_y = None 
+        
+        if abs(self.x - crew.x) <= prox_range_x: 
+            return True 
+        elif abs(self.y - crew.y) <= prox_range_y: 
+            return True 
+        else: 
+            return False 
     
     # if close to crewmate, kill mechanism otherwise do nothing 
     def kill(self): 
         if self.crew_proximity_check(): 
             return None 
         else: 
-            return None  
+            return None 
+
+    def draw(self): 
+        window.blit(self.imp, (self.x, self.y)) 
 
 table_radius = 50
     
