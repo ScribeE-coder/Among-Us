@@ -261,7 +261,6 @@ class Impostor():
         
         if keys[pygame.K_RIGHT]: 
             self.x += 1 
-
             
     def collision_check(self): 
         return False 
@@ -322,13 +321,14 @@ while running:
         
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_t:
-                # Reset and start animation
+                
+                # reset and start animation will implement timer later
                 monster_imp.animation_complete = False
                 monster_imp.animation_playing = True
                 monster_imp.current_frame = 0
                 monster_imp.animation_frame_count = 0
 
-    # Update animation if it's playing
+    # only update animation when cycle has started again
     if monster_imp.animation_playing:
         monster_imp.monster_transform()
 
