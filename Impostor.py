@@ -47,7 +47,7 @@ class Impostor():
         if self.animation_frame_count >= len(self.monster_transform_list): 
             self.animation_complete = True 
             self.animation_playing = False 
-            self.current_frame = 0 
+            self.current_frame = -1
             self.imp = self.monster_transform_list[self.current_frame] 
         
         self.imp = self.monster_transform_list[self.current_frame]
@@ -64,6 +64,9 @@ class Impostor():
         
         if keys[pygame.K_RIGHT]: 
             self.x += 1 
+
+        if keys[pygame.K_LEFT]: 
+            self.x -= 1 
             
     def collision_check(self): 
         return False 
@@ -80,7 +83,7 @@ class Impostor():
         else: 
             return False 
     
-    # if close to crewmate, kill mechanism otherwise do nothing 
+    # if close to crewmate, kill mechanism otherwise do nothing, will have countdown mechanism 
     def kill(self): 
         if self.crew_proximity_check(): 
             return None 

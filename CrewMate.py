@@ -117,6 +117,7 @@ class CrewMate():
         self.center_y = self.y + self.height / 2 
 
         # collision check after movement 
+        """ 
         if self.collision_check(self.obstacles): 
             self.x = old_x
             self.y = old_y 
@@ -124,10 +125,14 @@ class CrewMate():
             # update center after moving backwards 
             self.center_x = self.x + self.width / 2 
             self.center_y = self.y + self.height / 2  
+            """
 
+    # displaying current tasks on screen
     def display_tasks(): 
         return None
 
+
+    # as player completes tasks, they should be removed from task list 
     def update_tasks(): 
         return None 
         

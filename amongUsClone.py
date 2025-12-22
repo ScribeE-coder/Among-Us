@@ -1,6 +1,8 @@
 import pygame, math, os
 
-import CrewMate, Impostor, Obstacle
+import CrewMate, Impostor
+
+from Obstacle import Circular_Obstacle, Rectangle_Obstacle
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 640 
@@ -80,20 +82,20 @@ yellow_crew = CrewMate.CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_W
 
 monster_imp = Impostor.Impostor(imp_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, imp_transform_list, window)
 
-upper_right_table = Obstacle.Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
-emergency_table = Obstacle.Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
-upper_left_table = Obstacle.Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius)
-bottom_right_table = Obstacle.Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
-bottom_left_table = Obstacle.Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius) 
+upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
+emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
+upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius)
+bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
+bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius) 
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
 for table in tables: 
     obstacles.append(table)
 
-# will need to be optimized later creating hundreds of obstacles not ideal as map includes other rooms 
-for x in range(129, 469):
-    obstacles.append(Obstacle.Obstacle(x, 48, 0))
+# rectangular obstacles 
+caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 0)
+obstacles.append(caf_rect_obstacle) 
 
  # put your images on your created display    
 def draw(): 
