@@ -86,11 +86,14 @@ upper_left_table = Obstacle.Obstacle(centers.get("upper_left")[0], centers.get("
 bottom_right_table = Obstacle.Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
 bottom_left_table = Obstacle.Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius) 
 
-tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table] 
+tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
 for table in tables: 
     obstacles.append(table)
- 
+
+for x in range(129, 469):
+    obstacles.append(Obstacle.Obstacle(x, 48, 1))
+
  # put your images on your created display    
 def draw(): 
     window.blit(cafeteria, (0, 0))
