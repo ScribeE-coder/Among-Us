@@ -1,27 +1,26 @@
 import pygame, math, os 
 
-SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 600 
+SCREEN_WIDTH = 640
+SCREEN_HEIGHT = 640 
 
 pygame.init()
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Among Us")
 clock = pygame.time.Clock()
 
-cafeteria = pygame.image.load(r"C:\Users\kidmu\Among-US\images\amongUs_caf.PNG") 
+cafeteria = pygame.image.load("images/amongUs_caf.PNG") 
 cafeteria = pygame.transform.scale(cafeteria, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-yellow_crew = pygame.image.load(r"C:\Users\kidmu\Among-US\images\amongUs_yellowCrew.jpeg")
+yellow_crew = pygame.image.load("images/amongUs_yellowCrew.jpeg")
 yellow_crew = pygame.transform.scale(yellow_crew, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 
-crew_walk1 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk1.png") 
-crew_walk2 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk2.png")
-crew_walk3 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk3.png") 
-crew_walk4 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk4.png") 
-crew_walk5 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk5.png") 
-crew_walk6 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk6.png") 
-crew_walk7 = pygame.image.load(r"\Users\kidmu\Among-Us\images\crewWalk7.png")
-
+crew_walk1 = pygame.image.load("images/crewWalk1.png") 
+crew_walk2 = pygame.image.load("images/crewWalk2.png")
+crew_walk3 = pygame.image.load("images/crewWalk3.png") 
+crew_walk4 = pygame.image.load("images/crewWalk4.png") 
+crew_walk5 = pygame.image.load("images/crewWalk5.png") 
+crew_walk6 = pygame.image.load("images/crewWalk6.png") 
+crew_walk7 = pygame.image.load("images/crewWalk7.png")
 # squishing down images to scale 
 crew_walk1 = pygame.transform.scale(crew_walk1, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 crew_walk2 = pygame.transform.scale(crew_walk2, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15)) 
@@ -34,19 +33,19 @@ crew_walk7 = pygame.transform.scale(crew_walk7, (SCREEN_WIDTH/15, SCREEN_HEIGHT/
 crew_walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
 crew_walking_left = [pygame.transform.flip(sprite, True, False) for sprite in crew_walking_right]
 
-impTransform1 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform1.png")
-impTransform2 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform2.png")
-impTransform3 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform3.png")
-impTransform4 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform4.png")
-impTransform5 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform5.png")
-impTransform6 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform6.png")
-impTransform7 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform7.png")
-impTransform8 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform8.png")
-impTransform9 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform9.png")
-impTransform10 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform10.png")
-impTransform11 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform11.png")
-impTransform12 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform12.png")
-impTransform13 = pygame.image.load(r"\Users\kidmu\Among-Us\images\impTransform13.png")
+impTransform1 = pygame.image.load("images/impTransform1.png")
+impTransform2 = pygame.image.load("images/impTransform2.png")
+impTransform3 = pygame.image.load("images/impTransform3.png")
+impTransform4 = pygame.image.load("images/impTransform4.png")
+impTransform5 = pygame.image.load("images/impTransform5.png")
+impTransform6 = pygame.image.load("images/impTransform6.png")
+impTransform7 = pygame.image.load("images/impTransform7.png")
+impTransform8 = pygame.image.load("images/impTransform8.png")
+impTransform9 = pygame.image.load("images/impTransform9.png")
+impTransform10 = pygame.image.load("images/impTransform10.png")
+impTransform11 = pygame.image.load("images/impTransform11.png")
+impTransform12 = pygame.image.load("images/impTransform12.png")
+impTransform13 = pygame.image.load("images/impTransform13.png")
 
 impTransform1 = pygame.transform.scale(impTransform1, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 impTransform2 = pygame.transform.scale(impTransform2, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
