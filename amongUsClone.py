@@ -1,7 +1,7 @@
 import pygame, math 
 
-SCREEN_WIDTH = 640 
-SCREEN_HEIGHT = 640 
+SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 600 
 
 pygame.init()
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
