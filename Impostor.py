@@ -108,10 +108,11 @@ class Monster():
         self.height = height
         self.speed = speed 
         self.window = window 
+        
         self.monster_transform_list = monster_transform_list
         self.walk_right = walk_right 
         self.walk_left = walk_left 
-        self.stationary_monster = self.monster_transform_list[0]
+        self.stationary_monster = self.monster_transform_list[-1]
 
         # attributes for monster animation
         self.current_animation_frame = 0 
@@ -136,7 +137,7 @@ class Monster():
         if self.animation_complete: 
             return 
 
-        if not self.animation_playing: 
+        if not self.animation_complete: 
             self.animation_playing = True 
     
         now = pygame.time.get_ticks() 
@@ -146,8 +147,8 @@ class Monster():
             self.current_animation_frame = (self.current_animation_frame + 1) % len(self.monster_transform_list)
             self.animation_frame_count += 1 
             
-            # Set the image immediately after updating the frame
-            self.monster = self.monster_transform_list[self.current_animation_frame]
+        # set the image immediately after updating the frame
+        self.monster = self.monster_transform_list[self.current_animation_frame]
 
         # Check if we've shown all frames 
         if self.animation_frame_count >= len(self.monster_transform_list): 
@@ -167,8 +168,8 @@ class Monster():
                 self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
 
         # set current image based on direction
-        if self.direction == "right": 
-            self.monster = self.walk_right[self.current_frame]
+        if self.direction == "right":  
+            self.monster = self.walk_right[self.current_frame] 
         
         elif self.direction == "left": 
             self.monster = self.walk_left[self.current_frame]
@@ -180,7 +181,7 @@ class Monster():
             self.monster = self.walk_left[self.current_frame] 
 
     def monster_move(self, keys): 
-        self.is_moving = False 
+        self.is_moving = False
         
         if keys[pygame.K_UP]: 
             self.direction = 'up'
@@ -205,11 +206,8 @@ class Monster():
         if self.is_moving: 
             self.update_animation()
 
-        if not self.is_moving and not self.animation_playing and not self.animation_complete: 
+        if not self.is_moving: 
             self.monster = self.stationary_monster
-        
-        if self.animation_complete: 
-            self.monster = self.monster_transform_list[-1]
 
     def attack_animation(self): 
         now = pygame.time.get_ticks()

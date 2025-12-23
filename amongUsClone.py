@@ -68,7 +68,6 @@ monsterTransform11 = pygame.transform.scale(monsterTransform11, (SCREEN_WIDTH/15
 monsterTransform12 = pygame.transform.scale(monsterTransform12, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 monsterTransform13 = pygame.transform.scale(monsterTransform13, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 
-
 monster_transform_list = [monsterTransform1, monsterTransform2, monsterTransform3, monsterTransform4, monsterTransform5, monsterTransform6, monsterTransform7, monsterTransform8, monsterTransform9, monsterTransform10, monsterTransform11, monsterTransform12, monsterTransform13]
 
 monsterWalk1 = pygame.image.load("images/monsterWalk1.png")
@@ -90,7 +89,6 @@ monsterWalk7 = pygame.transform.scale(monsterWalk7, (SCREEN_WIDTH/15, SCREEN_HEI
 monster_walk_right = [monsterWalk1, monsterWalk2, monsterWalk3, monsterWalk4, monsterWalk5, monsterWalk6, monsterWalk7]
 monster_walk_left = [pygame.transform.flip(sprite, True, False) for sprite in monster_walk_right] 
 
-
 # animation cycle for monster attacking 
 monsterAttack1 = pygame.image.load('images/monsterAttack1.png')
 monsterAttack2 = pygame.image.load('images/monsterAttack2.png')
@@ -106,7 +104,7 @@ monsterAttack11 = pygame.image.load('images/monsterAttack11.png')
 monsterAttack12 = pygame.image.load('images/monsterAttack12.png')
 
 monsterAttack1 = pygame.transform.scale(monsterAttack1, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
-monsterAtack2 = pygame.transform.scale(monsterAttack2, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+monsterAttack2 = pygame.transform.scale(monsterAttack2, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 monsterAttack3 = pygame.transform.scale(monsterAttack3, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 monsterAttack4 = pygame.transform.scale(monsterAttack4, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 monsterAttack5 = pygame.transform.scale(monsterAttack5, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
@@ -181,14 +179,14 @@ while running:
             if event.key == pygame.K_0: 
                 monster_imp.attack()
 
-
     # only update animation when cycle has started again 
     if monster_imp.animation_playing:
         monster_imp.monster_transform()
 
-    yellow_crew.crew_move(keys) 
-    monster_imp.monster_move(keys)
+    if monster_imp.animation_complete: 
+        monster_imp.monster_move(keys)
 
+    yellow_crew.crew_move(keys) 
     
     draw()
     pygame.display.update()
