@@ -20,6 +20,9 @@ cafeteria = pygame.transform.scale(cafeteria, (SCREEN_WIDTH, SCREEN_HEIGHT))
 yellow_crew = pygame.image.load("images/amongUs_yellowCrew.jpeg")
 yellow_crew = pygame.transform.scale(yellow_crew, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 
+idle_crew = pygame.image.load("images/idle.png")
+idle_crew = pygame.transform.scale(idle_crew, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+
 crew_walk1 = pygame.image.load("images/crewWalk1.png") 
 crew_walk2 = pygame.image.load("images/crewWalk2.png")
 crew_walk3 = pygame.image.load("images/crewWalk3.png") 
@@ -129,7 +132,7 @@ centers = {"upper_right": (443, 180),
 
 table_radius = 50
     
-yellow_crew = CrewMate.CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left, obstacles, window) 
+yellow_crew = CrewMate.CrewMate(idle_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left, obstacles, window) 
 
 monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle
