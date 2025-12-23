@@ -259,5 +259,3 @@ class Monster():
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))
-
-    

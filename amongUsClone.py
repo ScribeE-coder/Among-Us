@@ -179,7 +179,7 @@ while running:
                 monster_imp.animation_frame_count = 0
 
             if event.key == pygame.K_0: 
-                monster_imp.attack()
+                monster_imp.attack(keys)
 
     # only update animation when cycle has started again 
     if monster_imp.animation_playing:
