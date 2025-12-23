@@ -134,6 +134,7 @@ table_radius = 50
 yellow_crew = CrewMate.CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left, obstacles, window) 
 
 monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
+monster_imp.monster_attack_list = monster_attack_cycle
 
 upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
@@ -164,7 +165,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT: 
             running = False
-
+ 
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos() 
             print(pos)
@@ -176,7 +177,10 @@ while running:
                 monster_imp.animation_playing = True
                 monster_imp.current_animation_frame = 0
                 monster_imp.animation_frame_count = 0
-                
+
+            if event.key == pygame.K_0: 
+                monster_imp.attack()
+
 
     # only update animation when cycle has started again 
     if monster_imp.animation_playing:
@@ -184,7 +188,8 @@ while running:
 
     yellow_crew.crew_move(keys) 
     monster_imp.monster_move(keys)
-    monster_imp.attack(keys)
+
+    
     draw()
     pygame.display.update()
     clock.tick(60)

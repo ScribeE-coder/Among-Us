@@ -127,8 +127,10 @@ class Monster():
         self.regular_imp_right = None 
         self.regular_imp_left = None 
 
-        # list for attack animation
-        self.monster_attack = None 
+        # attributes for attacking animation 
+        self.monster_attack_list = None 
+        self.attacking = False 
+        self.has_attacked = False # having has_attacked attribute will be useful for countdown mechanics later 
 
     def monster_animation(self): 
         if self.animation_complete: 
@@ -203,19 +205,33 @@ class Monster():
         if self.is_moving: 
             self.update_animation()
 
-        if not self.is_moving and self.animation_complete: 
+        if not self.is_moving and not self.animation_playing and not self.animation_complete: 
             self.monster = self.stationary_monster
+        
+        if self.animation_complete: 
+            self.monster = self.monster_transform_list[-1]
 
     def attack_animation(self): 
-        now = pygame.time.get_ticks() 
+        now = pygame.time.get_ticks()
+        self.monster_attack_frame_count = 0 
 
         if now - self.last_update > 100: 
             self.last_update = now 
-            
+            self.current_frame = (self.current_frame + 1 ) % len(self.monster_attack_list)
+            self.monster_attack_frame_count += 1 
 
-    def attack(self, keys): 
-        if keys[pygame.BUTTON_LEFT]: 
+        self.monster = self.monster_attack_list[self.current_frame]
+
+        if self.monster_attack_frame_count >= len(self.monster_attack_list): 
+            self.has_attacked = True 
+            self.attacking = False 
+
+    def attack(self, keys):
+        if keys[pygame.K_0] and not self.attacking: 
+            self.attacking = True   
             self.attack_animation()
+        else: 
+            return  
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))
