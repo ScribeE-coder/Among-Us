@@ -66,12 +66,27 @@ impTransform11 = pygame.transform.scale(impTransform11, (SCREEN_WIDTH/15, SCREEN
 impTransform12 = pygame.transform.scale(impTransform12, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 impTransform13 = pygame.transform.scale(impTransform13, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 
-imp_walk1 = None 
-imp_walk2 = None 
 
 imp_transform_list = [impTransform1, impTransform2, impTransform3, impTransform4, impTransform5, impTransform6, impTransform7, impTransform8, impTransform9, impTransform10, impTransform11, impTransform12, impTransform13]
 
-imp_movement_list = [] 
+monsterWalk1 = pygame.image.load("images/monsterWalk1.png")
+monsterWalk2 = pygame.image.load("images/monsterWalk2.png")
+monsterWalk3 = pygame.image.load("images/monsterWalk3.png")
+monsterWalk4 = pygame.image.load("images/monsterWalk4.png")
+monsterWalk5 = pygame.image.load("images/monsterWalk5.png")
+monsterWalk6 = pygame.image.load("images/monsterWalk6.png")
+monsterWalk7 = pygame.image.load("images/monsterWalk7.png")
+
+monsterWalk1 = pygame.transform.scale(monsterWalk1, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+monsterWalk2 = pygame.transform.scale(monsterWalk2, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+monsterWalk3 = pygame.transform.scale(monsterWalk3, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+monsterWalk4 = pygame.transform.scale(monsterWalk4, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+monsterWalk5 = pygame.transform.scale(monsterWalk5, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+monsterWalk6 = pygame.transform.scale(monsterWalk6, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
+monsterWalk7 = pygame.transform.scale(monsterWalk7, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15)) 
+
+monster_walk_right = [monsterWalk1, monsterWalk2, monsterWalk3, monsterWalk4, monsterWalk5, monsterWalk6, monsterWalk7]
+monster_walk_left = [pygame.transform.flip(sprite, True, False) for sprite in monster_walk_right] 
 
 obstacles = [] 
 
@@ -86,7 +101,7 @@ table_radius = 50
     
 yellow_crew = CrewMate.CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left, obstacles, window) 
 
-monster_imp = Impostor.Impostor(imp_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, imp_transform_list, window)
+monster_imp = Impostor.Impostor(imp_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, imp_transform_list, window, monster_walk_right, monster_walk_left)
 
 upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 

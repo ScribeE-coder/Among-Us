@@ -4,7 +4,7 @@ import CrewMate
 
 # walking right and left defaulted to None for now working on monster transform
 class Impostor(): 
-    def __init__(self, imp_img, x, y, width, height, monster_transform_list, window, walk_right=None, walk_left=None, speed=2): 
+    def __init__(self, imp_img, x, y, width, height, monster_transform_list, window, walk_right, walk_left, speed=2): 
         self.imp = imp_img 
         self.x = x 
         self.y = y 
@@ -69,21 +69,48 @@ class Impostor():
            if now - self.last_update > 100: 
                self.last_update = now 
                self.current_frame = (self.current_frame + 1) % len(self.walk_right)
+       
+       if self.direction == 'right':
+           self.imp = self.walk_right[self.current_frame] 
 
+       if self.direction == 'left': 
+           self.imp = self.walk_left[self.current_frame] 
 
+       if self.direction == 'up': 
+           self.imp = self.walk_right[self.current_frame]
+
+       if self.direction == 'down': 
+           self.imp = self.walk_left[self.current_frame] 
     
     def imp_move(self, keys):
+        self.is_moving = False 
+        
         if keys[pygame.K_UP]: 
+            self.direction = 'up'
             self.y -= 1 
+            self.is_moving = True 
         
         if keys[pygame.K_DOWN]: 
-            self.y += 1 
+            self.direction = 'down'
+            self.y += 1
+            self.is_moving = True  
         
         if keys[pygame.K_RIGHT]: 
+            self.direction = 'right'
             self.x += 1 
+            self.is_moving = True 
 
         if keys[pygame.K_LEFT]: 
+            self.direction = 'left'
             self.x -= 1 
+            self.is_moving = True 
+
+        if self.is_moving: 
+            self.imp_move_animation() 
+
+        else: 
+            self.imp = self.
+
             
     def collision_check(self): 
         return False 
@@ -109,3 +136,8 @@ class Impostor():
 
     def draw(self): 
         self.window.blit(self.imp, (self.x, self.y)) 
+
+
+class Monster(Impostor): 
+    def __init__(self): 
+        super.__init__()
