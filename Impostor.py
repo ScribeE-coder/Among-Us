@@ -127,6 +127,9 @@ class Monster():
         self.regular_imp_right = None 
         self.regular_imp_left = None 
 
+        # list for attack animation
+        self.monster_attack = None 
+
     def monster_animation(self): 
         if self.animation_complete: 
             return 
@@ -140,6 +143,7 @@ class Monster():
             self.last_update = now 
             self.current_animation_frame = (self.current_animation_frame + 1) % len(self.monster_transform_list)
             self.animation_frame_count += 1 
+            
             # Set the image immediately after updating the frame
             self.monster = self.monster_transform_list[self.current_animation_frame]
 
@@ -149,7 +153,7 @@ class Monster():
             self.animation_playing = False
             self.monster = self.monster_transform_list[-1]
 
-    def monster_transform(self): 
+    def monster_transform(self):
         self.monster_animation()
 
     def update_animation(self): 
@@ -198,16 +202,22 @@ class Monster():
 
         if self.is_moving: 
             self.update_animation()
-        
-        else: 
+
+        if not self.is_moving and self.animation_complete: 
             self.monster = self.stationary_monster
 
-    def kill(self): 
-        return
-       
+    def attack_animation(self): 
+        now = pygame.time.get_ticks() 
+
+        if now - self.last_update > 100: 
+            self.last_update = now 
+            
+
+    def attack(self, keys): 
+        if keys[pygame.BUTTON_LEFT]: 
+            self.attack_animation()
 
     def draw(self): 
-        self.window.blit(self.monster, (self.x, self.y)) 
-
+        self.window.blit(self.monster, (self.x, self.y))
 
     
