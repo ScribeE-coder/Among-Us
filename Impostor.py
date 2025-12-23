@@ -4,7 +4,7 @@ import CrewMate
 
 # walking right and left defaulted to None for now working on monster transform
 class Impostor(): 
-    def __init__(self, imp_img, x, y, width, height, monster_transform_list, window, walk_right, walk_left, speed=2): 
+    def __init__(self, imp_img, x, y, width, height, window, walk_right, walk_left, speed=2): 
         self.imp = imp_img 
         self.x = x 
         self.y = y 
@@ -12,7 +12,6 @@ class Impostor():
         self.height = height
         self.speed = speed 
         self.has_killed = False 
-        self.monster_transform_list = monster_transform_list
         self.imp_rect = pygame.Rect(self.x, self.y, self.width, self.height) 
 
         # attributes for walking animation
@@ -26,41 +25,8 @@ class Impostor():
 
         # attributes for collision
         self.obstacles = None 
-
-        # attributes for monster animation
-        self.current_frame = 0 
-        self.last_update = pygame.time.get_ticks() 
-        self.animation_playing = False 
-        self.animation_complete = False 
-        self.animation_frame_count = 0 
-
+        
         self.window = window 
-
-    def monster_animation(self): 
-        if self.animation_complete: 
-            return 
-
-        if not self.animation_playing: 
-            self.animation_playing = True 
-        
-        now = pygame.time.get_ticks() 
-        
-        if now - self.last_update > 100:  
-                self.last_update = now 
-                self.current_frame = (self.current_frame + 1) % len(self.monster_transform_list)
-                self.animation_frame_count += 1 
-
-        #checking if we've shown all frames 
-        if self.animation_frame_count >= len(self.monster_transform_list): 
-            self.animation_complete = True 
-            self.animation_playing = False 
-            self.current_frame = -1
-            self.imp = self.monster_transform_list[self.current_frame] 
-        
-        self.imp = self.monster_transform_list[self.current_frame]
-
-    def monster_transform(self): 
-        self.monster_animation()
 
     def imp_move_animation(self): 
        now = pygame.time.get_ticks() 
@@ -106,11 +72,7 @@ class Impostor():
             self.is_moving = True 
 
         if self.is_moving: 
-            self.imp_move_animation() 
-
-        else: 
-            self.imp = self.
-
+            self.imp_move_animation()
             
     def collision_check(self): 
         return False 
@@ -137,7 +99,116 @@ class Impostor():
     def draw(self): 
         self.window.blit(self.imp, (self.x, self.y)) 
 
-
 class Monster(Impostor): 
-    def __init__(self): 
-        super.__init__()
+    def __init__(self, monster_img, x, y, width, height, monster_transform_list, window, walk_right, walk_left, speed=2): 
+        self.monster = monster_img 
+        self.x = x
+        self.y = y 
+        self.width = width 
+        self.height = height
+        self.speed = speed 
+        self.window = window 
+        self.monster_transform_list = monster_transform_list
+        self.walk_right = walk_right 
+        self.walk_left = walk_left 
+        self.stationary_monster = self.monster_transform_list[0]
+
+        # attributes for monster animation
+        self.current_animation_frame = 0 
+        self.last_update = pygame.time.get_ticks() 
+        self.animation_playing = False 
+        self.animation_complete = False 
+        self.animation_frame_count = 0
+
+        self.direction = None 
+        self.is_moving = False
+        self.current_frame = 0 
+
+    def monster_animation(self): 
+        if self.animation_complete: 
+            return 
+
+        if not self.animation_playing: 
+            self.animation_playing = True 
+    
+        now = pygame.time.get_ticks() 
+    
+        if now - self.last_update > 100:  
+            self.last_update = now 
+            self.current_animation_frame = (self.current_animation_frame + 1) % len(self.monster_transform_list)
+            self.animation_frame_count += 1 
+            # Set the image immediately after updating the frame
+            self.monster = self.monster_transform_list[self.current_animation_frame]
+
+        # Check if we've shown all frames 
+        if self.animation_frame_count >= len(self.monster_transform_list): 
+            self.animation_complete = True 
+            self.animation_playing = False
+            self.monster = self.monster_transform_list[-1]
+
+    def monster_transform(self): 
+        self.monster_animation()
+
+    def update_animation(self): 
+        now = pygame.time.get_ticks() 
+
+        if self.is_moving: 
+            if now - self.last_update > 100: # 100 ms = 10 frames per second  
+                self.last_update = now 
+                self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
+
+        # set current image based on direction
+        if self.direction == "right": 
+            self.monster = self.walk_right[self.current_frame]
+        
+        elif self.direction == "left": 
+            self.monster = self.walk_left[self.current_frame]
+        
+        elif self.direction == "up": 
+            self.monster = self.walk_right[self.current_frame]
+        
+        elif self.direction == "down": 
+            self.monster = self.walk_left[self.current_frame] 
+
+    def monster_move(self, keys): 
+        self.is_moving = False 
+
+        if not self.animation_complete: 
+            Impostor.imp_move(self, keys) 
+            return 
+        
+        if keys[pygame.K_UP]: 
+            self.direction = 'up'
+            self.y -= 1
+            self.is_moving = True 
+
+        if keys[pygame.K_DOWN]: 
+            self.direction = 'down' 
+            self.y += 1 
+            self.is_moving = True 
+
+        if keys[pygame.K_LEFT]: 
+            self.direction = 'left'
+            self.x -= 1 
+            self.is_moving = True 
+
+        if keys[pygame.K_RIGHT]:
+            self.direction = 'right'
+            self.x += 1 
+            self.is_moving = True 
+
+        if self.is_moving: 
+            self.update_animation()
+        
+        else: 
+            self.monster = self.stationary_monster
+
+    def kill(self): 
+        Impostor.kill(self)
+        
+
+    def draw(self): 
+        self.window.blit(self.monster, (self.x, self.y)) 
+
+
+    
