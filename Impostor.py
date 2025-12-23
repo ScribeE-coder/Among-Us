@@ -227,7 +227,7 @@ class Monster():
             self.attacking = False 
 
     def attack(self, keys):
-        if keys[pygame.K_0] and not self.attacking: 
+        if not self.attacking: 
             self.attacking = True   
             self.attack_animation()
         else: 
