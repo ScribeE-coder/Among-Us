@@ -66,7 +66,13 @@ impTransform11 = pygame.transform.scale(impTransform11, (SCREEN_WIDTH/15, SCREEN
 impTransform12 = pygame.transform.scale(impTransform12, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 impTransform13 = pygame.transform.scale(impTransform13, (SCREEN_WIDTH/15, SCREEN_HEIGHT/15))
 
+imp_walk1 = None 
+imp_walk2 = None 
+
 imp_transform_list = [impTransform1, impTransform2, impTransform3, impTransform4, impTransform5, impTransform6, impTransform7, impTransform8, impTransform9, impTransform10, impTransform11, impTransform12, impTransform13]
+
+imp_movement_list = [] 
+
 obstacles = [] 
 
 centers = {"upper_right": (443, 180), 

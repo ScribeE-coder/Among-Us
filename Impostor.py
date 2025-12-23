@@ -20,7 +20,14 @@ class Impostor():
         self.walk_left = walk_left
         self.walk_up = self.walk_right 
         self.walk_down = self.walk_left 
+        self.animation_speed = 0.2 
+        self.direction = None 
+        self.is_moving = False 
 
+        # attributes for collision
+        self.obstacles = None 
+
+        # attributes for monster animation
         self.current_frame = 0 
         self.last_update = pygame.time.get_ticks() 
         self.animation_playing = False 
@@ -54,6 +61,16 @@ class Impostor():
 
     def monster_transform(self): 
         self.monster_animation()
+
+    def imp_move_animation(self): 
+       now = pygame.time.get_ticks() 
+
+       if self.is_moving: 
+           if now - self.last_update > 100: 
+               self.last_update = now 
+               self.current_frame = (self.current_frame + 1) % len(self.walk_right)
+
+
     
     def imp_move(self, keys):
         if keys[pygame.K_UP]: 

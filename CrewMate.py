@@ -25,6 +25,8 @@ class CrewMate():
         self.walk_down = self.walk_left 
         
         self.current_frame = 0 
+        
+        # not currently being used 
         self.animation_speed = 0.2 
 
         # timer that keeps track of when pygame started up (in miliseconds)
