@@ -99,7 +99,7 @@ class Impostor():
     def draw(self): 
         self.window.blit(self.imp, (self.x, self.y)) 
 
-class Monster(Impostor): 
+class Monster(): 
     def __init__(self, monster_img, x, y, width, height, monster_transform_list, window, walk_right, walk_left, speed=2): 
         self.monster = monster_img 
         self.x = x
@@ -123,6 +123,9 @@ class Monster(Impostor):
         self.direction = None 
         self.is_moving = False
         self.current_frame = 0 
+
+        self.regular_imp_right = None 
+        self.regular_imp_left = None 
 
     def monster_animation(self): 
         if self.animation_complete: 
@@ -172,10 +175,6 @@ class Monster(Impostor):
 
     def monster_move(self, keys): 
         self.is_moving = False 
-
-        if not self.animation_complete: 
-            Impostor.imp_move(self, keys) 
-            return 
         
         if keys[pygame.K_UP]: 
             self.direction = 'up'
@@ -204,8 +203,8 @@ class Monster(Impostor):
             self.monster = self.stationary_monster
 
     def kill(self): 
-        Impostor.kill(self)
-        
+        return
+       
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y)) 
