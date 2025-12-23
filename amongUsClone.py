@@ -133,6 +133,8 @@ yellow_crew = CrewMate.CrewMate(yellow_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_W
 
 monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle
+monster_imp.regular_imp_left = crew_walking_left
+monster_imp.regular_imp_right = crew_walking_right
 
 upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
@@ -182,8 +184,8 @@ while running:
     # only update animation when cycle has started again 
     if monster_imp.animation_playing:
         monster_imp.monster_transform()
-
-    if monster_imp.animation_complete: 
+    
+    else:
         monster_imp.monster_move(keys)
 
     yellow_crew.crew_move(keys) 

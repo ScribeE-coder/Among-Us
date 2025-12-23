@@ -112,7 +112,12 @@ class Monster():
         self.monster_transform_list = monster_transform_list
         self.walk_right = walk_right 
         self.walk_left = walk_left 
+        
+        # when standing still and transformed
         self.stationary_monster = self.monster_transform_list[-1]
+
+        # when standing still and haven't transformed 
+        self.stationary_imp = self.monster_transform_list[0]
 
         # attributes for monster animation
         self.current_animation_frame = 0 
@@ -125,6 +130,7 @@ class Monster():
         self.is_moving = False
         self.current_frame = 0 
 
+        # will need regular imp walking cycle when transformation hasn't been completed
         self.regular_imp_right = None 
         self.regular_imp_left = None 
 
@@ -142,13 +148,13 @@ class Monster():
     
         now = pygame.time.get_ticks() 
     
-        if now - self.last_update > 100:  
+        if now - self.last_update > 100:   
             self.last_update = now 
             self.current_animation_frame = (self.current_animation_frame + 1) % len(self.monster_transform_list)
             self.animation_frame_count += 1 
-            
-        # set the image immediately after updating the frame
-        self.monster = self.monster_transform_list[self.current_animation_frame]
+        
+            # set the image immediately after updating the frame
+            self.monster = self.monster_transform_list[self.current_animation_frame]
 
         # Check if we've shown all frames 
         if self.animation_frame_count >= len(self.monster_transform_list): 
@@ -165,20 +171,37 @@ class Monster():
         if self.is_moving: 
             if now - self.last_update > 100: # 100 ms = 10 frames per second  
                 self.last_update = now 
-                self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
+                
+                if self.animation_complete: 
+                    self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
+                
+                elif not self.animation_complete:
+                    self.current_frame = (self.current_frame + 1) % len(self.regular_imp_right)
 
         # set current image based on direction
-        if self.direction == "right":  
-            self.monster = self.walk_right[self.current_frame] 
+        if self.direction == "right": 
+            if self.animation_complete: 
+                self.monster = self.walk_right[self.current_frame]
+            else:
+                self.monster = self.regular_imp_right[self.current_frame] 
         
         elif self.direction == "left": 
-            self.monster = self.walk_left[self.current_frame]
+            if self.animation_complete:
+                self.monster = self.walk_left[self.current_frame]
+            else: 
+                self.monster = self.regular_imp_left[self.current_frame]
         
-        elif self.direction == "up": 
-            self.monster = self.walk_right[self.current_frame]
+        elif self.direction == "up":
+            if self.animation_complete: 
+                self.monster = self.walk_right[self.current_frame]
+            else: 
+                self.monster = self.regular_imp_right[self.current_frame]
         
         elif self.direction == "down": 
-            self.monster = self.walk_left[self.current_frame] 
+            if self.animation_complete:
+                self.monster = self.walk_left[self.current_frame] 
+            else: 
+                self.monster = self.regular_imp_left[self.current_frame] 
 
     def monster_move(self, keys): 
         self.is_moving = False
@@ -206,8 +229,11 @@ class Monster():
         if self.is_moving: 
             self.update_animation()
 
-        if not self.is_moving: 
+        if not self.is_moving and self.animation_complete: 
             self.monster = self.stationary_monster
+        
+        elif not self.is_moving and not self.animation_complete: 
+            self.monster = self.stationary_imp
 
     def attack_animation(self): 
         now = pygame.time.get_ticks()
