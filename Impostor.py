@@ -298,6 +298,10 @@ class Monster(Sprite):
             self.monster = self.stationary_monster
 
     def attack(self): 
+            # shouldn't be able to use attack if you haven't transformed
+            if not self.animation_playing and not self.animation_complete: 
+                return 
+                 
             if len(self.monster_attack_list) != 0: 
                 self.create_monster_attack_direction() 
             self.attack_animation() 

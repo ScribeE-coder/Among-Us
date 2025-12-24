@@ -188,11 +188,12 @@ while running:
                 monster_imp.current_animation_frame = 0
                 monster_imp.animation_frame_count = 0
 
-            if event.key == pygame.K_0: 
-                monster_imp.monster_attack_frame_count = 0
-                monster_imp.attacking = True 
-                monster_imp.attack_complete = False
-                monster_imp.current_attack_frame = 0
+            if event.key == pygame.K_0:
+                if monster_imp.animation_complete:
+                    monster_imp.monster_attack_frame_count = 0
+                    monster_imp.attacking = True 
+                    monster_imp.attack_complete = False
+                    monster_imp.current_attack_frame = 0
     
     if monster_imp.attacking: 
         monster_imp.attack()
