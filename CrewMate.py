@@ -1,7 +1,8 @@
 import pygame, math, Sprite
 
-class CrewMate(Sprite): 
+class CrewMate(): 
     def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, obstacles, window, speed=2, killed=False): 
+        super.__init__(Sprite)
         self.crew = crew_img 
         self.stationary_crew = crew_img # need this so animation cycle doesn't freeze mid sprite when no movement detected
         self.x = x 
