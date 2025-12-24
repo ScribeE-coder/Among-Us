@@ -45,7 +45,7 @@ class Circular_Obstacle(Obstacle):
         
 class Sprite_Obstacle(Obstacle): 
     def __init__(self, x, y, width, height): 
-        super().__init__(self, y)
+        super().__init__(x, y)
         self.width = width 
         self.height = height 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
