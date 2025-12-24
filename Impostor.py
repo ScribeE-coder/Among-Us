@@ -316,3 +316,15 @@ class Monster(Sprite):
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))
+
+class ShapeShifter(Sprite): 
+    def __init__(self, img, x, y, width, height, window): 
+        self.img = img 
+        self.x = x 
+        self.y = y 
+        self.width = width
+        self.height = height 
+        self.window = window 
+
+    def draw(self): 
+        self.window.blit(self.img, (self.x, self.y))

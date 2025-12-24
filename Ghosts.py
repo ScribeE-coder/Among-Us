@@ -1,6 +1,8 @@
-import pygame 
+import pygame, Sprite 
 
-class Ghost: 
+from Sprite import Sprite 
+
+class Ghost(Sprite): 
     def __init__(self, ghost_img, ghost_type, x, y, tasks:list, window): 
         self.ghost_type = ghost_type # ghosts can either be crew or impostors 
         self.ghost_img = ghost_img 
