@@ -73,11 +73,12 @@ class Impostor():
 
         if self.is_moving: 
             self.imp_move_animation()
-            
+    
+    # TODO: will check if imp is colliding with object to stop phasing through objects     
     def collision_check(self): 
         return False 
     
-    #checks whether imp is close enough to crew to kill 
+    # TODO: checks whether imp is close enough to crew to kill 
     def crew_proximity_check(self, crew: CrewMate): 
         prox_range_x = None 
         prox_range_y = None 
@@ -89,7 +90,7 @@ class Impostor():
         else: 
             return False 
     
-    # if close to crewmate, kill mechanism otherwise do nothing, will have countdown mechanism 
+    # TODO: if close to crewmate, kill mechanism otherwise do nothing, will have countdown mechanism 
     def kill(self): 
         if self.crew_proximity_check(): 
             return None 
@@ -137,8 +138,14 @@ class Monster():
         # attributes for attacking animation 
         self.monster_attack_list = None 
         self.attacking = False 
-        self.has_attacked = False # having has_attacked attribute will be useful for countdown mechanics later 
+        self.attack_complete = False # having has_attacked attribute will be useful for countdown mechanics later 
+        self.current_attack_frame = 0 
+        self.attack_frame_count = 0 
 
+        # rectangle for collision purposes
+        self.monster_rect = pygame.Rect(self.x, self.y, self.width, self.height) 
+
+    """ Creates the animation cycle that plays when you transform into a monster"""
     def monster_animation(self): 
         if self.animation_complete: 
             return 
@@ -165,6 +172,7 @@ class Monster():
     def monster_transform(self):
         self.monster_animation()
 
+    """ Creates the walking cycle pre and post monster transformation"""
     def update_animation(self): 
         now = pygame.time.get_ticks() 
 
@@ -236,26 +244,22 @@ class Monster():
             self.monster = self.stationary_imp
 
     def attack_animation(self): 
-        now = pygame.time.get_ticks()
-        self.monster_attack_frame_count = 0 
+        now = pygame.time.get_ticks() 
 
         if now - self.last_update > 100: 
             self.last_update = now 
-            self.current_frame = (self.current_frame + 1 ) % len(self.monster_attack_list)
+            self.current_attack_frame = (self.current_attack_frame + 1) % len(self.monster_attack_list) 
             self.monster_attack_frame_count += 1 
 
-        self.monster = self.monster_attack_list[self.current_frame]
+        self.monster = self.monster_attack_list[self.current_attack_frame]
 
         if self.monster_attack_frame_count >= len(self.monster_attack_list): 
-            self.has_attacked = True 
-            self.attacking = False 
+            self.attack_complete = True 
+            self.attacking = False
+            self.monster = self.stationary_monster
 
-    def attack(self, keys):
-        if not self.attacking: 
-            self.attacking = True   
-            self.attack_animation()
-        else: 
-            return  
+    def attack(self):   
+            self.attack_animation()  
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))

@@ -26,7 +26,7 @@ class CrewMate():
         
         self.current_frame = 0 
         
-        # not currently being used 
+        # TODO:not currently being used 
         self.animation_speed = 0.2 
 
         # timer that keeps track of when pygame started up (in miliseconds)
@@ -66,7 +66,7 @@ class CrewMate():
         elif self.direction == "down": 
             self.crew = self.walk_left[self.current_frame] 
     
-    # check for whether crewmate is colliding with other objects 
+    # TODO: check for whether crewmate is colliding with other objects 
     def collision_check(self, obstacles):
         for object in obstacles: 
             # calculating distance between centers 
@@ -129,12 +129,12 @@ class CrewMate():
             self.center_y = self.y + self.height / 2  
             """
 
-    # displaying current tasks on screen
+    # TODO: displaying current tasks on screen
     def display_tasks(): 
         return None
 
 
-    # as player completes tasks, they should be removed from task list 
+    # TODO: as player completes tasks, they should be removed from task list 
     def update_tasks(): 
         return None 
         

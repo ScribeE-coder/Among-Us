@@ -182,17 +182,22 @@ while running:
                 monster_imp.animation_frame_count = 0
 
             if event.key == pygame.K_0: 
-                monster_imp.attack(keys)
+                monster_imp.monster_attack_frame_count = 0
+                monster_imp.attacking = True 
+                monster_imp.attack_complete = False
+                monster_imp.current_attack_frame = 0
+    
+    if monster_imp.attacking: 
+        monster_imp.attack()
 
     # only update animation when cycle has started again 
     if monster_imp.animation_playing:
         monster_imp.monster_transform()
-    
-    else:
+   
+    elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
     yellow_crew.crew_move(keys) 
-    
     draw()
     pygame.display.update()
     clock.tick(60)
