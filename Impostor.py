@@ -136,14 +136,19 @@ class Monster():
         self.regular_imp_left = None 
 
         # attributes for attacking animation 
-        self.monster_attack_list = None 
+        self.monster_attack_list = []
         self.attacking = False 
         self.attack_complete = False # having has_attacked attribute will be useful for countdown mechanics later 
         self.current_attack_frame = 0 
         self.attack_frame_count = 0 
 
         # rectangle for collision purposes
-        self.monster_rect = pygame.Rect(self.x, self.y, self.width, self.height) 
+        self.monster_rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def create_monster_attack_direction(self): 
+        if self.monster_attack_list: 
+            self.monster_attack_right = self.monster_attack_list 
+            self.monster_attack_left = [pygame.transform.flip(sprite, True, False) for sprite in self.monster_attack_right]
 
     """ Creates the animation cycle that plays when you transform into a monster"""
     def monster_animation(self): 
@@ -247,8 +252,17 @@ class Monster():
         now = pygame.time.get_ticks() 
 
         if now - self.last_update > 100: 
-            self.last_update = now 
-            self.current_attack_frame = (self.current_attack_frame + 1) % len(self.monster_attack_list) 
+            self.last_update = now
+            
+            if self.direction == 'right': 
+                self.current_attack_frame = (self.current_attack_frame + 1) % len(self.monster_attack_right) 
+            if self.direction == 'left': 
+                self.current_attack_frame = (self.current_attack_frame + 1) % len(self.monster_attack_left)
+            if self.direction == 'up': 
+                self.current_attack_frame = (self.current_attack_frame + 1) % len(self.monster_attack_right)
+            if self.direction == 'down': 
+                self.current_attack_frame = (self.current_attack_frame + 1) % len(self.monster_attack_left)
+            
             self.monster_attack_frame_count += 1 
 
         self.monster = self.monster_attack_list[self.current_attack_frame]
@@ -258,7 +272,9 @@ class Monster():
             self.attacking = False
             self.monster = self.stationary_monster
 
-    def attack(self):   
+    def attack(self): 
+            if len(self.monster_attack_list) != 0: 
+                self.create_monster_attack_direction() 
             self.attack_animation()  
 
     def draw(self): 

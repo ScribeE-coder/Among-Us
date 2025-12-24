@@ -1,8 +1,9 @@
 import pygame 
 
 class Ghost: 
-    def __init__(self, ghost_type, x, y, tasks:list): 
-        self.ghost_type = ghost_type
+    def __init__(self, ghost_img, ghost_type, x, y, tasks:list): 
+        self.ghost_type = ghost_type # ghosts can either be crew or impostors 
+        self.ghost_img = ghost_img 
         self.x = x 
         self.y = y
         self.width = 0 
@@ -34,3 +35,6 @@ class Ghost:
             return True 
         else: 
             return False 
+        
+    def draw(self): 
+        window.blit()

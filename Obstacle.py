@@ -1,4 +1,4 @@
-import pygame 
+import pygame, math
 
 class Obstacle(): 
     def __init__(self, x, y): 
@@ -19,7 +19,10 @@ class Rectangle_Obstacle(Obstacle):
         self.obstacle_type = 'Rectangle'
 
     def check_collision(self, other): 
-        return None 
+        if not other.rect: 
+            raise TypeError('Other object needs to have Rect attribute to detect collision') 
+        else: 
+            return self.rect.colliderect(other.rect) 
 
 class Circular_Obstacle(Obstacle): 
     def __init__(self, x, y, radius): 
@@ -28,7 +31,10 @@ class Circular_Obstacle(Obstacle):
         self.obstacle_type = 'Circular'
 
     def check_collision(self, other): 
-        return None 
+        if not other.center_y: 
+            raise TypeError('Other object needs to have center attributes to detect collision')
+        distance = math.sqrt((other.center_x - self.center_x) ** 2 + (other.center_y - self.center_y) ** 2) 
+
 
 
 
