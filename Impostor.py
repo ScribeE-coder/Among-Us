@@ -1,9 +1,7 @@
-import pygame
-
-import CrewMate
+import pygame, CrewMate, Sprite
 
 # walking right and left defaulted to None for now working on monster transform
-class Impostor(): 
+class Impostor(Sprite): 
     def __init__(self, imp_img, x, y, width, height, window, walk_right, walk_left, speed=2): 
         self.imp = imp_img 
         self.x = x 
