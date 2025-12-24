@@ -24,7 +24,7 @@ class Impostor():
         self.is_moving = False 
 
         # attributes for collision
-        self.obstacles = None 
+        self.obstacles = [] 
         
         self.window = window 
 
@@ -107,6 +107,8 @@ class Monster():
         self.y = y 
         self.width = width 
         self.height = height
+        self.center_x = self.x + self.width / 2
+        self.center_y = self.y + self.height /2 
         self.speed = speed 
         self.window = window 
         
@@ -143,7 +145,9 @@ class Monster():
         self.attack_frame_count = 0 
 
         # rectangle for collision purposes
-        self.monster_rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.obstacles = [] # list of obstacles needed for collision
+        self.radius = self.width / 2 
 
     def create_monster_attack_direction(self): 
         if self.monster_attack_list: 
@@ -218,6 +222,8 @@ class Monster():
 
     def monster_move(self, keys): 
         self.is_moving = False
+        old_x = self.x 
+        old_y = self.y
         
         if keys[pygame.K_UP]: 
             self.direction = 'up'
@@ -237,7 +243,25 @@ class Monster():
         if keys[pygame.K_RIGHT]:
             self.direction = 'right'
             self.x += 1 
-            self.is_moving = True 
+            self.is_moving = True  
+
+        self.rect.x = self.x
+        self.rect.y = self.y 
+
+        self.center_x = self.x + self.width / 2 
+        self.center_y = self.y + self.height / 2 
+
+        collision = self.collision_check(self.obstacles)
+
+        # if collision, then need to update x, y coordinates then call animation on those coordinates 
+        if collision: 
+            self.x = old_x 
+            self.y = old_y 
+            
+            self.center_x = self.x + self.width / 2 
+            self.center_y = self.y + self.height / 2 
+            self.rect.x = self.x 
+            self.rect.y = self.y 
 
         if self.is_moving: 
             self.update_animation()
@@ -246,7 +270,7 @@ class Monster():
             self.monster = self.stationary_monster
         
         elif not self.is_moving and not self.animation_complete: 
-            self.monster = self.stationary_imp
+            self.monster = self.stationary_imp      
 
     def attack_animation(self): 
         now = pygame.time.get_ticks() 
@@ -275,7 +299,15 @@ class Monster():
     def attack(self): 
             if len(self.monster_attack_list) != 0: 
                 self.create_monster_attack_direction() 
-            self.attack_animation()  
+            self.attack_animation() 
+
+    def collision_check(self, obstacles): 
+        for obstacle in obstacles: 
+            colliding = obstacle.check_collision(self)
+            if colliding: 
+                return True 
+        else: 
+            return False 
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))

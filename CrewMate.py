@@ -104,10 +104,6 @@ class CrewMate():
             self.direction = "right"
             self.is_moving = True   
 
-        # update center after movement 
-        self.center_x = self.x + self.width / 2 
-        self.center_y = self.y + self.height / 2 
-
         # updating rectangle with new coordinates after movement 
         self.rect.x = self.x 
         self.rect.y = self.y
@@ -117,7 +113,10 @@ class CrewMate():
         self.center_y = self.y + self.height / 2 
 
         # collision check after movement 
-        if self.collision_check(self.obstacles): 
+        collision = self.collision_check(self.obstacles)
+
+        # if collision is found, move backwards 
+        if collision: 
             self.x = old_x
             self.y = old_y 
 

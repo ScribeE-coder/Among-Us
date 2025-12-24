@@ -139,6 +139,7 @@ monster_imp.monster_attack_list = monster_attack_cycle
 monster_imp.regular_imp_left = crew_walking_left
 monster_imp.regular_imp_right = crew_walking_right
 
+
 upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
 upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius)
@@ -154,6 +155,8 @@ for table in tables:
 caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 1)
 obstacles.append(caf_rect_obstacle) 
 
+monster_imp.obstacles = obstacles
+
  # put your images on your created display    
 def draw(): 
     window.blit(cafeteria, (0, 0))
@@ -166,7 +169,6 @@ def draw():
     """ 
 
 running = True 
-
 while running: 
     keys = pygame.key.get_pressed()
     
@@ -201,7 +203,6 @@ while running:
    
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
-
 
     yellow_crew.crew_move(keys) 
     draw()
