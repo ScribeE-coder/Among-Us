@@ -5,7 +5,7 @@ from Sprite import Sprite
 # walking right and left defaulted to None for now working on monster transform
 class Impostor(Sprite): 
     def __init__(self, imp_img, x, y, width, height, window, walk_right, walk_left, speed=2): 
-        super().__init__(x, y, width, height, walk_right, walk_left, window)
+        super().__init__(imp_img, x, y, width, height, walk_right, walk_left, window)
         self.imp = imp_img 
         self.x = x 
         self.y = y 

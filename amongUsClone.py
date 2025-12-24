@@ -155,8 +155,6 @@ for table in tables:
 caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 1)
 obstacles.append(caf_rect_obstacle)
 
-monster_imp.obstacles = obstacles
-
  # put your images on your created display    
 def draw(): 
     window.blit(cafeteria, (0, 0))

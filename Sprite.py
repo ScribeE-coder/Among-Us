@@ -1,7 +1,8 @@
 
-# characters like Impostors and Crewmates inherit from Sprite class, useful for collision detection
+# characters like Impostors and Crewmates inherit from Sprite class
 class Sprite: 
-    def __init__(self, x, y, width, height, walk_right, walk_left, window):
+    def __init__(self, img, x, y, width, height, walk_right, walk_left, window):
+        self.img = img
         self.x = x 
         self.y = y
         self.width = width 
@@ -11,7 +12,7 @@ class Sprite:
         self.window = window 
 
     def collision_check(self): 
-        return 
+        raise NotImplementedError("Only subclasses contain this method")
     
     def draw(self): 
-        return
+        raise NotImplementedError("Only subclasses contain this method") 

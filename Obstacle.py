@@ -1,4 +1,5 @@
-import pygame, math, Impostor
+import pygame, math, Impostor, Sprite 
+from Sprite import Sprite 
 
 class Obstacle(): 
     def __init__(self, x, y): 
@@ -41,15 +42,18 @@ class Circular_Obstacle(Obstacle):
             return True 
         else: 
             return False
-
-
-# TODO: checking whether sprites are colliding with each other so they don't phase through each other 
-class Sprite(Obstacle): 
-    def __init__(self): 
-        self.type = 'Sprite'
+        
+class Sprite_Obstacle(Obstacle): 
+    def __init__(self, x, y, width, height): 
+        super().__init__(self, y)
+        self.width = width 
+        self.height = height 
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
 
     def check_collision(self, other): 
         if not isinstance(other, Sprite): 
-            raise TypeError('Other object must be an instance of Impostor class')
+            raise TypeError('Other object must be instance of Sprite class')
+        elif self == other: 
+            return False 
         else: 
-            return
+            return self.rect.colliderect(other.rect)
