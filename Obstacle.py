@@ -1,4 +1,4 @@
-import pygame, math
+import pygame, math, Impostor
 
 class Obstacle(): 
     def __init__(self, x, y): 
@@ -40,9 +40,16 @@ class Circular_Obstacle(Obstacle):
         if distance < (self.radius + other.radius): 
             return True 
         else: 
-            return False 
+            return False
 
 
+# TODO: checking whether sprites are colliding with each other so they don't phase through each other 
+class Sprite(Obstacle): 
+    def __init__(self): 
+        self.type = 'Sprite'
 
-
-
+    def check_collision(self, other): 
+        if not isinstance(other, Sprite): 
+            raise TypeError('Other object must be an instance of Impostor class')
+        else: 
+            return

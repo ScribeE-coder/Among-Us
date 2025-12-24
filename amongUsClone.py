@@ -153,7 +153,7 @@ for table in tables:
 
 # rectangular obstacles 
 caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 1)
-obstacles.append(caf_rect_obstacle) 
+obstacles.append(caf_rect_obstacle)
 
 monster_imp.obstacles = obstacles
 
