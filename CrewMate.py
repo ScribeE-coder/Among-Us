@@ -10,7 +10,7 @@ class CrewMate():
         self.height = height 
         self.speed = speed
         self.killed = killed 
-        self.crew_rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
         # crewmate collision properties 
         self.radius = self.width / 2 
@@ -68,15 +68,12 @@ class CrewMate():
     
     # TODO: check for whether crewmate is colliding with other objects 
     def collision_check(self, obstacles):
-        for object in obstacles: 
-            # calculating distance between centers 
-            distance = math.sqrt((self.center_x - object.center_x ) ** 2 + (self.center_y - object.center_y) ** 2) 
-
-            # collision detected 
-            if distance < (self.radius + object.radius): 
+        for obstacle in obstacles: 
+            colliding = obstacle.check_collision(self)  
+            # if im colliding with an object then you don't need to check for the other objects 
+            if colliding: 
                 return True 
-        else: 
-            return False      
+        return False
     
     def crew_move(self, keys): 
         self.is_moving = False
@@ -107,32 +104,41 @@ class CrewMate():
             self.direction = "right"
             self.is_moving = True   
 
-        # update animation
-        if self.is_moving:
-            self.update_animation()  
+        # update center after movement 
+        self.center_x = self.x + self.width / 2 
+        self.center_y = self.y + self.height / 2 
 
-        else: 
-            self.crew = self.stationary_crew 
+        # updating rectangle with new coordinates after movement 
+        self.rect.x = self.x 
+        self.rect.y = self.y
 
         # update center after movement 
         self.center_x = self.x + self.width / 2 
         self.center_y = self.y + self.height / 2 
 
         # collision check after movement 
-        """ 
         if self.collision_check(self.obstacles): 
             self.x = old_x
             self.y = old_y 
 
             # update center after moving backwards 
             self.center_x = self.x + self.width / 2 
-            self.center_y = self.y + self.height / 2  
-            """
+            self.center_y = self.y + self.height / 2
+
+            # update rectangle after moving backwards 
+            self.rect.x = self.x 
+            self.rect.y = self.y 
+
+        # update animation
+        if self.is_moving:
+            self.update_animation()  
+
+        else: 
+            self.crew = self.stationary_crew  
 
     # TODO: displaying current tasks on screen
     def display_tasks(): 
         return None
-
 
     # TODO: as player completes tasks, they should be removed from task list 
     def update_tasks(): 

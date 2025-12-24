@@ -1,7 +1,7 @@
 import pygame 
 
 class Ghost: 
-    def __init__(self, ghost_img, ghost_type, x, y, tasks:list): 
+    def __init__(self, ghost_img, ghost_type, x, y, tasks:list, window): 
         self.ghost_type = ghost_type # ghosts can either be crew or impostors 
         self.ghost_img = ghost_img 
         self.x = x 
@@ -10,6 +10,7 @@ class Ghost:
         self.height = 0  
         self.tasks = tasks 
         self.has_tasks = True 
+        self.window = window 
 
         if not self.tasks: 
             self.has_tasks = False
@@ -37,4 +38,4 @@ class Ghost:
             return False 
         
     def draw(self): 
-        window.blit()
+        self.window.blit(self.ghost_img, (self.x, self.y))

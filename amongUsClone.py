@@ -151,7 +151,7 @@ for table in tables:
     obstacles.append(table)
 
 # rectangular obstacles 
-caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 0)
+caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 1)
 obstacles.append(caf_rect_obstacle) 
 
  # put your images on your created display    
@@ -159,6 +159,11 @@ def draw():
     window.blit(cafeteria, (0, 0))
     yellow_crew.crew_draw() 
     monster_imp.draw()
+    
+    """ Drawing to see where exactly boundaries are for collision detection
+    pygame.draw.rect(window, (255, 0, 0), caf_rect_obstacle.rect, 1)  # Red outline
+    pygame.draw.rect(window, (255, 0, 0), yellow_crew.rect, 2)
+    """ 
 
 running = True 
 
@@ -196,6 +201,7 @@ while running:
    
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
+
 
     yellow_crew.crew_move(keys) 
     draw()
