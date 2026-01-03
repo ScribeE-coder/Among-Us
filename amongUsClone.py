@@ -14,6 +14,14 @@ window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Among Us Clone")
 clock = pygame.time.Clock()
 
+def load_image(img_file): 
+    file = pygame.image.load(img_file)
+    return file 
+
+def scale(img_file, scale_width, scale_height): 
+    file = pygame.transform.scale(img_file, )(scale_width, scale_height)
+    return file 
+
 cafeteria = pygame.image.load("images/amongUs_caf.PNG") 
 cafeteria = pygame.transform.scale(cafeteria, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
