@@ -3,7 +3,7 @@ import pygame, Sprite
 from Sprite import Sprite 
 
 class Ghost(Sprite): 
-    def __init__(self, ghost_img, ghost_type, x, y, tasks:list, window): 
+    def __init__(self, ghost_img, ghost_type, x, y, tasks:list, fly_left, fly_right, window): 
         self.ghost_type = ghost_type # ghosts can either be crew or impostors 
         self.ghost_img = ghost_img 
         self.x = x 
@@ -13,15 +13,19 @@ class Ghost(Sprite):
         self.tasks = tasks 
         self.has_tasks = True 
         self.window = window 
+        self.fly_left = fly_left 
+        self.fly_right = fly_right 
 
+        # checking whether ghosts still has tasks left 
         if not self.tasks: 
             self.has_tasks = False
 
-        pygame.Rect(self.x, self.y, self.width, self.height) 
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
 
     def ghost_move(self, keys): 
         if keys[pygame.K_w]: 
             self.y -= 1 
+
         
         if keys[pygame.K_a]: 
             self.x -= 1 

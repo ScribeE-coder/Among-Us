@@ -139,12 +139,15 @@ class CrewMate(Sprite):
             self.crew = self.stationary_crew  
 
     # TODO: displaying current tasks on screen
-    def display_tasks(): 
+    def display_tasks(self): 
         return None
 
     # TODO: as player completes tasks, they should be removed from task list 
-    def update_tasks(): 
+    def update_tasks(self): 
         return None 
+    
+    def been_killed(self): 
+        self.killed = True 
         
     def crew_draw(self): 
         self.window.blit(self.crew, (self.x, self.y))
