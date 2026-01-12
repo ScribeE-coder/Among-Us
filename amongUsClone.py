@@ -1,6 +1,6 @@
 import pygame, math, os
 
-import CrewMate, Impostor
+import CrewMate, Impostor, Ghost
 
 from Obstacle import Circular_Obstacle, Rectangle_Obstacle
 
@@ -83,6 +83,16 @@ monsterAttack12 = load_img('images/monsterAttack12.png', SCREEN_WIDTH/divisor, S
 
 monster_attack_cycle = [monsterAttack1, monsterAttack2, monsterAttack3, monsterAttack4, monsterAttack5, monsterAttack6, monsterAttack7, monsterAttack8, monsterAttack9, monsterAttack10, monsterAttack11, monsterAttack12]
 
+crewDead1 = load_img('images/crewDead1.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+crewDead2 = load_img('images/crewDead2.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+crewDead3 = load_img('images/crewDead4.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+crewDead4 = load_img('images/crewDead4.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+crewDead5 = load_img('images/crewDead5.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+crewDead6 = load_img('images/crewDead6.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+crewDead7 = load_img('images/crewDead7.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
+crewDead8 = load_img('images/crewDead8.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
+crewDead9 = load_img('images/crewDead9.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+
 obstacles = [] 
 
 centers = {"upper_right": (443, 180), 
@@ -101,12 +111,13 @@ monster_imp.monster_attack_list = monster_attack_cycle
 monster_imp.regular_imp_left = crew_walking_left
 monster_imp.regular_imp_right = crew_walking_right
 
-
 upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
 emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
 upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius)
 bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
 bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius) 
+
+yellow_ghost = Ghost()
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
@@ -167,7 +178,11 @@ while running:
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
-    yellow_crew.crew_move(keys) 
+    yellow_crew.crew_move(keys)
+    # if yellow crew is killed, play kill animation, then reassign yellow crew to ghost 
+    if yellow_crew.killed: 
+        yellow_crew.been_killed() 
+    
     draw()
     pygame.display.update()
     clock.tick(60)

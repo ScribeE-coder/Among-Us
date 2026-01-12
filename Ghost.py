@@ -13,8 +13,6 @@ class Ghost(Sprite):
         self.tasks = tasks 
         self.has_tasks = True 
         self.window = window 
-        self.fly_left = fly_left 
-        self.fly_right = fly_right 
 
         # checking whether ghosts still has tasks left 
         if not self.tasks: 
@@ -25,7 +23,6 @@ class Ghost(Sprite):
     def ghost_move(self, keys): 
         if keys[pygame.K_w]: 
             self.y -= 1 
-
         
         if keys[pygame.K_a]: 
             self.x -= 1 

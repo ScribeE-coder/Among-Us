@@ -28,6 +28,10 @@ class CrewMate(Sprite):
         self.walk_down = self.walk_left 
         
         self.current_frame = 0 
+        self.current_kill_frame = 0 
+        self.killed_animation_list = [] 
+        self.killed_animation_complete = False 
+        self.killed_animation_playing = False 
         
         # TODO:not currently being used 
         self.animation_speed = 0.2 
@@ -138,6 +142,19 @@ class CrewMate(Sprite):
         else: 
             self.crew = self.stationary_crew  
 
+    # TODO: play kill animation when crewmate is killed 
+    def kill_animation(self): 
+        now = pygame.time.get_ticks()
+        if now - self.last_update > 100: 
+            self.last_update = now 
+            self.current_killed_frame = (self.current_kill_frame + 1) % len(self.killed_animation_list)
+            self.current_killed_frame += 1 
+
+            self.img = self.killed_animation_list[self.current_killed_frame]
+            if self.current_killed_frame >= len(self.killed_animation_list):
+                self.killed_animation_complete = True  
+                self.killed_animation_playing = False
+
     # TODO: displaying current tasks on screen
     def display_tasks(self): 
         return None
@@ -148,6 +165,7 @@ class CrewMate(Sprite):
     
     def been_killed(self): 
         self.killed = True 
+        self.kill_animation()
         
     def crew_draw(self): 
         self.window.blit(self.crew, (self.x, self.y))
