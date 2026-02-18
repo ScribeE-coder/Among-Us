@@ -117,8 +117,6 @@ upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("
 bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
 bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius) 
 
-yellow_ghost = Ghost()
-
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
 for table in tables: 

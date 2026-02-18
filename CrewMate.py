@@ -3,7 +3,7 @@ import pygame, math, Sprite
 from Sprite import Sprite
 
 class CrewMate(Sprite): 
-    def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, obstacles, window, speed=2, killed=False): 
+    def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, obstacles, window, speed=2): 
         super().__init__(crew_img, x, y, width, height, walk_right, walk_left, obstacles, window)
         self.crew = crew_img 
         self.stationary_crew = crew_img # need this so animation cycle doesn't freeze mid sprite when no movement detected
@@ -32,6 +32,8 @@ class CrewMate(Sprite):
         self.killed_animation_list = [] 
         self.killed_animation_complete = False 
         self.killed_animation_playing = False 
+
+        self.killed = False 
         
         # TODO:not currently being used 
         self.animation_speed = 0.2 
