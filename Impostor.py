@@ -300,11 +300,12 @@ class Monster(Sprite):
     def attack(self): 
             # shouldn't be able to use attack if you haven't transformed
             if not self.animation_playing and not self.animation_complete: 
-                return 
+                return None 
                  
             if len(self.monster_attack_list) != 0: 
                 self.create_monster_attack_direction() 
-            self.attack_animation() 
+            self.attack_animation()
+            return None  
 
     def collision_check(self, obstacles): 
         for obstacle in obstacles: 
@@ -316,6 +317,7 @@ class Monster(Sprite):
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))
+        return None 
 
 class ShapeShifter(Sprite): 
     def __init__(self, img, x, y, width, height, window): 

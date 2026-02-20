@@ -12,7 +12,6 @@ class CrewMate(Sprite):
         self.width = width 
         self.height = height 
         self.speed = speed
-        self.killed = killed 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
         # crewmate collision properties 
@@ -26,14 +25,14 @@ class CrewMate(Sprite):
         
         self.walk_up = self.walk_right
         self.walk_down = self.walk_left 
-        
+
+        # attributes for being killed animation 
+        self.killed = False 
         self.current_frame = 0 
         self.current_kill_frame = 0 
         self.killed_animation_list = [] 
         self.killed_animation_complete = False 
         self.killed_animation_playing = False 
-
-        self.killed = False 
         
         # TODO:not currently being used 
         self.animation_speed = 0.2 
@@ -165,9 +164,20 @@ class CrewMate(Sprite):
     def update_tasks(self): 
         return None 
     
-    def been_killed(self): 
-        self.killed = True 
-        self.kill_animation()
+    def kill_distance_check(self, imp): 
+        distance = 0.5 
+        if self.x - imp.x <= distance and self.y - imp.y <= distance: 
+            return True
+        else: 
+            return False 
+    
+    def been_killed(self, imp): 
+        # if imp is within a certain distance of crew, that means crew was killed 
+        if self.kill_distance_check(imp): 
+            self.killed = True 
+            self.kill_animation()
+        return None 
         
     def crew_draw(self): 
         self.window.blit(self.crew, (self.x, self.y))
+        return None 
