@@ -77,9 +77,8 @@ class Impostor(Sprite):
     
     # TODO: will check if imp is colliding with object to stop phasing through objects     
     def collision_check(self): 
-        return False 
+       raise NotImplementedError
     
-    # TODO: checks whether imp is close enough to crew to kill 
     def crew_proximity_check(self, crew: CrewMate): 
         prox_range_x = None 
         prox_range_y = None 
@@ -94,9 +93,7 @@ class Impostor(Sprite):
     # TODO: if close to crewmate, kill mechanism otherwise do nothing, will have countdown mechanism 
     def kill(self): 
         if self.crew_proximity_check(): 
-            return None 
-        else: 
-            return None 
+            raise NotImplementedError
 
     def draw(self): 
         self.window.blit(self.imp, (self.x, self.y)) 
@@ -143,9 +140,8 @@ class Monster(Sprite):
         self.attacking = False 
         self.attack_complete = False # having has_attacked attribute will be useful for countdown mechanics later 
         self.current_attack_frame = 0 
-        self.attack_frame_count = 0 
 
-        # rectangle for collision purposes
+        # rectangle for collision detection purposes
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.obstacles = [] # list of obstacles needed for collision
         self.radius = self.width / 2 
@@ -298,22 +294,21 @@ class Monster(Sprite):
             self.monster = self.stationary_monster
 
     def attack(self): 
-            # shouldn't be able to use attack if you haven't transformed
-            if not self.animation_playing and not self.animation_complete: 
-                return None 
+        # shouldn't be able to use attack if you haven't transformed
+        if not self.animation_playing and not self.animation_complete: 
+            return None 
                  
-            if len(self.monster_attack_list) != 0: 
-                self.create_monster_attack_direction() 
+        if len(self.monster_attack_list) != 0: 
+            self.create_monster_attack_direction() 
             self.attack_animation()
-            return None  
+        return None  
 
-    def collision_check(self, obstacles): 
+    def collision_check(self:Sprite, obstacles): 
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)
             if colliding: 
                 return True 
-        else: 
-            return False 
+        return False 
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))

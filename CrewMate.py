@@ -26,10 +26,12 @@ class CrewMate(Sprite):
         self.walk_up = self.walk_right
         self.walk_down = self.walk_left 
 
+        self.current_frame = 0 
+
         # attributes for being killed animation 
         self.killed = False 
-        self.current_frame = 0 
-        self.current_kill_frame = 0 
+        self.current_killed_animation_frame = 0 
+        self.killed_animation_frame_count = 0
         self.killed_animation_list = [] 
         self.killed_animation_complete = False 
         self.killed_animation_playing = False 
@@ -74,7 +76,6 @@ class CrewMate(Sprite):
         elif self.direction == "down": 
             self.crew = self.walk_left[self.current_frame] 
     
-    # TODO: check for whether crewmate is colliding with other objects 
     def collision_check(self, obstacles):
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)  
@@ -141,42 +142,47 @@ class CrewMate(Sprite):
             self.update_animation()  
 
         else: 
-            self.crew = self.stationary_crew  
+            self.crew = self.stationary_crew 
 
-    # TODO: play kill animation when crewmate is killed 
-    def kill_animation(self): 
-        now = pygame.time.get_ticks()
-        if now - self.last_update > 100: 
-            self.last_update = now 
-            self.current_killed_frame = (self.current_kill_frame + 1) % len(self.killed_animation_list)
-            self.current_killed_frame += 1 
-
-            self.img = self.killed_animation_list[self.current_killed_frame]
-            if self.current_killed_frame >= len(self.killed_animation_list):
-                self.killed_animation_complete = True  
-                self.killed_animation_playing = False
-
+    def load_kill_animation(self, listy): 
+        self.killed_animation_list = listy 
+        return None 
+    
     # TODO: displaying current tasks on screen
     def display_tasks(self): 
-        return None
+        raise NotImplementedError 
 
     # TODO: as player completes tasks, they should be removed from task list 
     def update_tasks(self): 
-        return None 
+        raise NotImplementedError
+
+    def kill_animation(self): 
+        now = pygame.time.get_ticks()
+        
+        if now - self.last_update > 100: 
+            self.last_update = now 
+            self.current_killed_animation_frame = (self.current_killed_animation_frame + 1) % len(self.killed_animation_list)
+            self.killed_animation_frame_count += 1 
+            self.crew = self.killed_animation_list[self.current_killed_animation_frame] 
+
+            # check if we've gone through all the frames 
+            if self.current_killed_animation_frame >= len(self.killed_animation_list):
+                self.killed_animation_complete = True  
+                self.killed_animation_playing = False
+                self.crew = self.killed_animation_list[-1] 
+        return None
     
     def kill_distance_check(self, imp): 
-        distance = 0.5 
-        if self.x - imp.x <= distance and self.y - imp.y <= distance: 
+        distance = 10 
+        if abs(self.x - imp.x) <= distance and abs(self.y - imp.y) <= distance: 
             return True
         else: 
             return False 
     
-    def been_killed(self, imp): 
+    def been_killed(self): 
         # if imp is within a certain distance of crew, that means crew was killed 
-        if self.kill_distance_check(imp): 
-            self.killed = True 
-            self.kill_animation()
-        return None 
+        self.killed = True 
+        self.kill_animation()
         
     def crew_draw(self): 
         self.window.blit(self.crew, (self.x, self.y))

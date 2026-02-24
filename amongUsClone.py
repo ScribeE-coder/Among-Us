@@ -93,6 +93,8 @@ crewDead7 = load_img('images/crewDead7.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT
 crewDead8 = load_img('images/crewDead8.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
 crewDead9 = load_img('images/crewDead9.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
+crewDead_listy = [crewDead1, crewDead2, crewDead3, crewDead4, crewDead5, crewDead6, crewDead7, crewDead8, crewDead9] 
+
 obstacles = [] 
 
 centers = {"upper_right": (443, 180), 
@@ -104,7 +106,8 @@ centers = {"upper_right": (443, 180),
 
 table_radius = 50
     
-yellow_crew = CrewMate.CrewMate(idle_crew, 320, 380, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left, obstacles, window) 
+yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left, obstacles, window) 
+yellow_crew.load_kill_animation(crewDead_listy) 
 
 monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle
@@ -177,9 +180,11 @@ while running:
         monster_imp.monster_move(keys)
 
     yellow_crew.crew_move(keys)
+    
     # if yellow crew is killed, play kill animation, then reassign yellow crew to ghost 
-    if yellow_crew.killed: 
-        yellow_crew.been_killed() 
+    if yellow_crew.kill_distance_check(monster_imp) and not yellow_crew.killed and monster_imp.attack_complete: 
+        print('yellow crew has been killed') 
+        yellow_crew.been_killed()
     
     draw()
     pygame.display.update()
