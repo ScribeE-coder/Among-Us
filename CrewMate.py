@@ -156,7 +156,7 @@ class CrewMate(Sprite):
     def update_tasks(self): 
         raise NotImplementedError
 
-    def kill_animation(self): 
+    def killed_animation(self): 
         now = pygame.time.get_ticks()
         
         if now - self.last_update > 100: 
@@ -179,10 +179,11 @@ class CrewMate(Sprite):
         else: 
             return False 
     
-    def been_killed(self): 
+    def been_killed(self, imp): 
         # if imp is within a certain distance of crew, that means crew was killed 
-        self.killed = True 
-        self.kill_animation()
+        if self.kill_distance_check(imp): 
+            self.killed_animation()
+        return None 
         
     def crew_draw(self): 
         self.window.blit(self.crew, (self.x, self.y))

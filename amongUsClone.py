@@ -184,7 +184,7 @@ while running:
     # if yellow crew is killed, play kill animation, then reassign yellow crew to ghost 
     if yellow_crew.kill_distance_check(monster_imp) and not yellow_crew.killed and monster_imp.attack_complete: 
         print('yellow crew has been killed') 
-        yellow_crew.been_killed()
+        yellow_crew.been_killed(monster_imp) 
     
     draw()
     pygame.display.update()
