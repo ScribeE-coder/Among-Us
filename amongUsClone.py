@@ -107,7 +107,8 @@ centers = {"upper_right": (443, 180),
 table_radius = 50
     
 yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDead_listy) 
-#yellow_crew.load_kill_animation(crewDead_listy) 
+stat_ghosty = load_img('images/stationary_ghost.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+yellow_crew.ghosty = stat_ghosty # type: ignore
 
 monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle

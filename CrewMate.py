@@ -54,7 +54,7 @@ class CrewMate(Sprite):
         self.tasks = ["Clean the bathroom", "Do crack", "Shoot the president", "Fuck you're mom"] 
         self.has_tasks = True 
 
-        self.ghostie = None 
+        self.ghosty = None 
 
     def update_animation(self): 
         now = pygame.time.get_ticks()
@@ -186,7 +186,7 @@ class CrewMate(Sprite):
         if self.killed_animation_frame_count >= len(self.killed_animation_list):
             self.killed_animation_complete = True  
             self.killed_animation_playing = False
-            self.crew = self.killed_animation_list[-1] 
+            self.crew = self.ghosty
         
         return None
     
