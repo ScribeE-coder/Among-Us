@@ -106,8 +106,8 @@ centers = {"upper_right": (443, 180),
 
 table_radius = 50
     
-yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_WIDTH/17, crew_walking_right, crew_walking_left, obstacles, window) 
-yellow_crew.load_kill_animation(crewDead_listy) 
+yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDead_listy) 
+#yellow_crew.load_kill_animation(crewDead_listy) 
 
 monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle
@@ -130,6 +130,7 @@ caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 1)
 obstacles.append(caf_rect_obstacle)
 
 monster_imp.obstacles = obstacles
+tracker = 0 
 
  # put your images on your created display    
 def draw(): 
@@ -156,7 +157,6 @@ while running:
         
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_t:
-                # reset and start animation will implement timer later
                 monster_imp.animation_complete = False
                 monster_imp.animation_playing = True
                 monster_imp.current_animation_frame = 0
@@ -182,9 +182,14 @@ while running:
     yellow_crew.crew_move(keys)
     
     # if yellow crew is killed, play kill animation, then reassign yellow crew to ghost 
-    if yellow_crew.kill_distance_check(monster_imp) and not yellow_crew.killed and monster_imp.attack_complete:  
+    if yellow_crew.kill_distance_check(monster_imp) and monster_imp.attack_complete:
         yellow_crew.been_killed(monster_imp) 
-    yellow_crew = Ghost()
+
+    if yellow_crew.killed_animation_playing: 
+        yellow_crew.killed_animation()
+
+    # yellow crew needs to reassigned to ghost sprite after being killed 
+    #yellow_crew.killed = True 
     
     draw()
     pygame.display.update()

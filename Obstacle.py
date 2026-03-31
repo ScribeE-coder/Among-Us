@@ -19,7 +19,7 @@ class Rectangle_Obstacle(Obstacle):
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
         self.type = 'Rectangle'
 
-    def check_collision(self, other): 
+    def check_collision(self, other):  # type: ignore
         if not other.rect: 
             raise AttributeError('Other object needs to have Rect attribute to detect collision') 
         else: 
@@ -31,7 +31,7 @@ class Circular_Obstacle(Obstacle):
         self.radius = radius 
         self.type = 'Circular'
 
-    def check_collision(self, other): 
+    def check_collision(self, other):  # type: ignore
         if not other.center_y or not other.radius: 
             raise AttributeError('Other object needs to have center attributes to detect collision')
         
@@ -50,7 +50,7 @@ class Sprite_Obstacle(Obstacle):
         self.height = height 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
 
-    def check_collision(self, other): 
+    def check_collision(self, other):  # type: ignore
         if not isinstance(other, Sprite): 
             raise TypeError('Other object must be instance of Sprite class')
         elif self == other: 
