@@ -188,9 +188,7 @@ while running:
 
     if yellow_crew.killed_animation_playing: 
         yellow_crew.killed_animation()
-
-    # yellow crew needs to reassigned to ghost sprite after being killed 
-    #yellow_crew.killed = True 
+  
     
     draw()
     pygame.display.update()

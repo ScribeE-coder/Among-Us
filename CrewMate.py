@@ -28,8 +28,7 @@ class CrewMate(Sprite):
 
         self.current_frame = 0 
 
-        # attributes for being killed animation 
-        self.killed = False 
+        # attributes for being killed animation  
         self.current_killed_animation_frame = 0 
         self.killed_animation_frame_count = 0
         self.killed_animation_list = crewDead_listy 
@@ -167,6 +166,8 @@ class CrewMate(Sprite):
         raise NotImplementedError
 
     def killed_animation(self): 
+        self.time_of_death = pygame.time.get_ticks() 
+        
         if self.killed_animation_complete: 
             return None 
         
