@@ -111,14 +111,14 @@ yellow_crew.load_kill_animation(crewDead_listy)
 
 monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle
-monster_imp.regular_imp_left = crew_walking_left
-monster_imp.regular_imp_right = crew_walking_right
+monster_imp.regular_imp_left = crew_walking_left # type: ignore
+monster_imp.regular_imp_right = crew_walking_right # type: ignore
 
-upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
-emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius) 
-upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius)
-bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
-bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius) 
+upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius) # type: ignore
+emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius)  # type: ignore
+upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius) # type: ignore
+bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius)  # type: ignore
+bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius)  # type: ignore
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
@@ -134,7 +134,7 @@ monster_imp.obstacles = obstacles
  # put your images on your created display    
 def draw(): 
     window.blit(cafeteria, (0, 0))
-    yellow_crew.crew_draw() 
+    yellow_crew.crew_draw()  # type: ignore
     monster_imp.draw()
     
     """ Drawing to see where exactly boundaries are for collision detection
@@ -182,9 +182,9 @@ while running:
     yellow_crew.crew_move(keys)
     
     # if yellow crew is killed, play kill animation, then reassign yellow crew to ghost 
-    if yellow_crew.kill_distance_check(monster_imp) and not yellow_crew.killed and monster_imp.attack_complete: 
-        print('yellow crew has been killed') 
+    if yellow_crew.kill_distance_check(monster_imp) and not yellow_crew.killed and monster_imp.attack_complete:  
         yellow_crew.been_killed(monster_imp) 
+    yellow_crew = Ghost()
     
     draw()
     pygame.display.update()

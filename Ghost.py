@@ -34,11 +34,15 @@ class Ghost(Sprite):
             self.x += 1 
 
     # if ghost still has tasks those tasks should still be displayed 
-    def display_tasks(self): 
+    def still_tasks(self): 
         if self.has_tasks: 
             return True 
         else: 
-            return False 
+            return False
+
+    # TODO: function will display crew's current tasks in window 
+    def display_tasks(self): 
+        raise NotImplementedError
         
     def draw(self): 
         self.window.blit(self.ghost_img, (self.x, self.y))

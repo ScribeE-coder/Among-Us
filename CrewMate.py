@@ -49,7 +49,7 @@ class CrewMate(Sprite):
         self.obstacles = obstacles 
         self.window = window
 
-        self.tasks = [] 
+        self.tasks = ["Clean the bathroom", "Do crack", "Shoot the president", "Fuck you're mom"] 
         self.has_tasks = True 
 
     def update_animation(self): 
@@ -76,7 +76,7 @@ class CrewMate(Sprite):
         elif self.direction == "down": 
             self.crew = self.walk_left[self.current_frame] 
     
-    def collision_check(self, obstacles):
+    def collision_check(self, obstacles): # type: ignore
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)  
             # if im colliding with an object then you don't need to check for the other objects 
@@ -148,6 +148,11 @@ class CrewMate(Sprite):
         self.killed_animation_list = listy 
         return None 
     
+    # TODO: add tasks to crew 
+    def add_tasks(self, task): 
+        self.tasks.append(task)
+        return self.tasks 
+    
     # TODO: displaying current tasks on screen
     def display_tasks(self): 
         raise NotImplementedError 
@@ -173,11 +178,11 @@ class CrewMate(Sprite):
         return None
     
     def kill_distance_check(self, imp): 
-        distance = 10 
-        if abs(self.x - imp.x) <= distance and abs(self.y - imp.y) <= distance: 
-            return True
+        distance = 50
+        if abs(self.x - imp.x) <= distance or abs(self.y - imp.y) <= distance: 
+            return True 
         else: 
-            return False 
+            return False
     
     def been_killed(self, imp): 
         # if imp is within a certain distance of crew, that means crew was killed 
