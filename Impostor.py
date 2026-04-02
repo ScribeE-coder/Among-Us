@@ -5,7 +5,7 @@ from Sprite import Sprite
 # walking right and left defaulted to None for now working on monster transform
 class Impostor(Sprite): 
     def __init__(self, imp_img, x, y, width, height, window, walk_right, walk_left, speed=2): 
-        super().__init__(imp_img, x, y, width, height, walk_right, walk_left, window)
+        super().__init__(imp_img, x, y, width, height, walk_right, walk_left, self.obstacles, window)
         self.imp = imp_img 
         self.x = x 
         self.y = y 
@@ -79,20 +79,26 @@ class Impostor(Sprite):
     def collision_check(self): 
        raise NotImplementedError
     
-    def crew_proximity_check(self, crew: CrewMate): 
-        prox_range_x = None 
-        prox_range_y = None 
-        
-        if abs(self.x - crew.x) <= prox_range_x: 
-            return True 
-        elif abs(self.y - crew.y) <= prox_range_y: 
+    # this method may not even be necessary 
+    def crew_proximity_check(self, crew): 
+        prox_range_x = 30 
+        prox_range_y = 30 
+
+        if abs(self.x - crew.x) <= prox_range_x and abs(self.y - crew.y) <= prox_range_y: 
             return True 
         else: 
             return False 
     
+    def vent_animation(self): 
+        raise NotImplementedError
+
+    # TODO: all imps and engineers should be able to vent 
+    def vent(self): 
+        raise NotImplementedError
+    
     # TODO: if close to crewmate, kill mechanism otherwise do nothing, will have countdown mechanism 
-    def kill(self): 
-        if self.crew_proximity_check(): 
+    def kill(self, crew): 
+        if self.crew_proximity_check(crew): 
             raise NotImplementedError
 
     def draw(self): 
@@ -190,32 +196,32 @@ class Monster(Sprite):
                     self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
                 
                 elif not self.animation_complete:
-                    self.current_frame = (self.current_frame + 1) % len(self.regular_imp_right)
+                    self.current_frame = (self.current_frame + 1) % len(self.regular_imp_right) # type: ignore
 
         # set current image based on direction
         if self.direction == "right": 
             if self.animation_complete: 
                 self.monster = self.walk_right[self.current_frame]
             else:
-                self.monster = self.regular_imp_right[self.current_frame] 
+                self.monster = self.regular_imp_right[self.current_frame]  # type: ignore
         
         elif self.direction == "left": 
             if self.animation_complete:
                 self.monster = self.walk_left[self.current_frame]
             else: 
-                self.monster = self.regular_imp_left[self.current_frame]
+                self.monster = self.regular_imp_left[self.current_frame] # type: ignore
         
         elif self.direction == "up":
             if self.animation_complete: 
                 self.monster = self.walk_right[self.current_frame]
             else: 
-                self.monster = self.regular_imp_right[self.current_frame]
+                self.monster = self.regular_imp_right[self.current_frame] # type: ignore
         
         elif self.direction == "down": 
             if self.animation_complete:
                 self.monster = self.walk_left[self.current_frame] 
             else: 
-                self.monster = self.regular_imp_left[self.current_frame] 
+                self.monster = self.regular_imp_left[self.current_frame]  # type: ignore
 
     def monster_move(self, keys): 
         self.is_moving = False
@@ -301,14 +307,22 @@ class Monster(Sprite):
         if len(self.monster_attack_list) != 0: 
             self.create_monster_attack_direction() 
             self.attack_animation()
+        
         return None  
 
-    def collision_check(self:Sprite, obstacles): 
+    def collision_check(self:Sprite, obstacles):  # type: ignore
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)
             if colliding: 
                 return True 
         return False 
+    
+    def vent_animation(self): 
+        raise NotImplementedError
+    
+    #monsters need to be able to use vents 
+    def vent(self): 
+        raise NotImplementedError
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))

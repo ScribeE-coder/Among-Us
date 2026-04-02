@@ -123,6 +123,9 @@ bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
+# storing vent location coordinates with the name of their location to be used later 
+vents = {}
+
 for table in tables: 
     obstacles.append(table)
 
@@ -175,21 +178,23 @@ while running:
 
     # only update animation when cycle has started again 
     if monster_imp.animation_playing:
-        monster_imp.monster_transform()
+        monster_imp.monster_transform() # calls monster animation function
    
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
     yellow_crew.crew_move(keys)
     
-    # if yellow crew is killed, play kill animation, then reassign yellow crew to ghost 
+    """If yellow crew is killed, play kill animation, then reassign yellow crew to ghost; the current bug is that the loops basically waits until the kill_distance_check
+    method returns True, then it allows for yellow_crew to be killed. It shouldn't wait until the distance check, if the kill distance check fails, then the imp should have a 
+    cooldown before it can attack again"""
+    
     if yellow_crew.kill_distance_check(monster_imp) and monster_imp.attack_complete:
         yellow_crew.been_killed(monster_imp) 
 
     if yellow_crew.killed_animation_playing: 
         yellow_crew.killed_animation()
-  
-    
+
     draw()
     pygame.display.update()
     clock.tick(60)

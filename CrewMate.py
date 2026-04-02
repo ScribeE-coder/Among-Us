@@ -191,7 +191,7 @@ class CrewMate(Sprite):
         return None
     
     def kill_distance_check(self, imp): 
-        distance = 50
+        distance = 20
         if abs(self.x - imp.x) <= distance or abs(self.y - imp.y) <= distance: 
             return True 
         else: 
