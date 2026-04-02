@@ -19,6 +19,7 @@ class Ghost(Sprite):
             self.has_tasks = False
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
+        self.ghost_time = pygame.time.get_ticks() 
 
     def ghost_move(self, keys): 
         if keys[pygame.K_w]: 
@@ -33,6 +34,14 @@ class Ghost(Sprite):
         if keys[pygame.K_d]: 
             self.x += 1 
 
+
+    def ghost_animation(self): 
+        now = pygame.time.get_ticks() 
+        if now - self.ghost_time > 100: 
+            self.ghost_time = now 
+        
+
+
     # if ghost still has tasks those tasks should still be displayed 
     def still_tasks(self): 
         if self.has_tasks: 
@@ -44,5 +53,5 @@ class Ghost(Sprite):
     def display_tasks(self): 
         raise NotImplementedError
         
-    def draw(self): 
+    def ghost_draw(self): 
         self.window.blit(self.ghost_img, (self.x, self.y))

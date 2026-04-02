@@ -188,7 +188,6 @@ class CrewMate(Sprite):
             self.killed_animation_complete = True  
             self.killed_animation_playing = False
             self.crew = self.ghosty
-        
         return None
     
     def kill_distance_check(self, imp): 
