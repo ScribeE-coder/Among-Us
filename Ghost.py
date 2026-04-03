@@ -12,14 +12,17 @@ class Ghost(Sprite):
         self.height = 0  
         self.tasks = tasks 
         self.has_tasks = True 
+        self.fly_left = fly_left 
+        self.fly_right = fly_right
         self.window = window 
 
         # checking whether ghosts still has tasks left 
-        if not self.tasks: 
-            self.has_tasks = False
+        self.has_tasks = True 
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
         self.ghost_time = pygame.time.get_ticks() 
+
+        self.ghost_animation_listy = []
 
     def ghost_move(self, keys): 
         if keys[pygame.K_w]: 
@@ -39,6 +42,8 @@ class Ghost(Sprite):
         now = pygame.time.get_ticks() 
         if now - self.ghost_time > 100: 
             self.ghost_time = now 
+            self.current_animation_frame = (self.current_animation_frame + 1) % len(self.ghost_animation_listy) 
+            self.animation_frame_count += 1 
         
 
 
