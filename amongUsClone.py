@@ -192,6 +192,10 @@ while running:
 
     if yellow_crew.killed_animation_playing: 
         yellow_crew.killed_animation()
+    
+    if yellow_crew.is_ghost: 
+        # yellow crew needs to be turned into ghost 
+        break 
 
     draw()
     pygame.display.update()
