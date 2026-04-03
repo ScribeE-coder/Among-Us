@@ -174,7 +174,7 @@ while running:
                     monster_imp.current_attack_frame = 0
     
     if monster_imp.attacking: 
-        monster_imp.attack()
+        monster_imp.attack(yellow_crew)
 
     # only update animation when cycle has started again 
     if monster_imp.animation_playing:
@@ -185,12 +185,10 @@ while running:
 
     yellow_crew.crew_move(keys)
     
-    """If yellow crew is killed, play kill animation, then reassign yellow crew to ghost; the current bug is that the loops basically waits until the kill_distance_check
-    method returns True, then it allows for yellow_crew to be killed. It shouldn't wait until the distance check, if the kill distance check fails, then the imp should have a 
-    cooldown before it can attack again"""
-    
-    if yellow_crew.kill_distance_check(monster_imp) and monster_imp.attack_complete:
-        yellow_crew.been_killed(monster_imp) 
+    """Need to figure out a way to stop it from waiting until distance check is true and then letting imp kill"""
+
+    if monster_imp.kill_landed:
+        yellow_crew.been_killed(monster_imp)  
 
     if yellow_crew.killed_animation_playing: 
         yellow_crew.killed_animation()

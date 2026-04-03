@@ -23,6 +23,7 @@ class Impostor(Sprite):
         self.animation_speed = 0.2 
         self.direction = None 
         self.is_moving = False 
+        self.kill_registered = False 
 
         # attributes for collision
         self.obstacles = [] 
@@ -152,6 +153,9 @@ class Monster(Sprite):
         self.obstacles = [] # list of obstacles needed for collision
         self.radius = self.width / 2 
 
+        self.attack_cooldown = 0
+        self.kill_landed = False 
+
     def create_monster_attack_direction(self): 
         if self.monster_attack_list: 
             self.monster_attack_right = self.monster_attack_list 
@@ -275,7 +279,7 @@ class Monster(Sprite):
         elif not self.is_moving and not self.animation_complete: 
             self.monster = self.stationary_imp      
 
-    def attack_animation(self): 
+    def attack_animation(self, crew): 
         now = pygame.time.get_ticks() 
 
         if now - self.last_update > 100: 
@@ -297,16 +301,20 @@ class Monster(Sprite):
         if self.monster_attack_frame_count >= len(self.monster_attack_list): 
             self.attack_complete = True 
             self.attacking = False
+            self.kill_landed = crew.kill_distance_check(self)
             self.monster = self.stationary_monster
+        return
 
-    def attack(self): 
+    def attack(self, crew): 
         # shouldn't be able to use attack if you haven't transformed
+        self.attack_cooldown = pygame.time.get_ticks() 
+        
         if not self.animation_playing and not self.animation_complete: 
             return None 
                  
         if len(self.monster_attack_list) != 0: 
             self.create_monster_attack_direction() 
-            self.attack_animation()
+            self.attack_animation(crew)
         
         return None  
 
@@ -320,22 +328,18 @@ class Monster(Sprite):
     def vent_animation(self): 
         raise NotImplementedError
     
-    #monsters need to be able to use vents 
+    #TODO: monsters need to be able to use vents 
     def vent(self): 
         raise NotImplementedError
+    
+    def kill_cooldown_check(self): 
+        now = pygame.time.get_ticks() 
+        """if the number of miliseconds between when attack was first called and now is >= x, then imp can attack again"""
+        if abs(self.attack_cooldown - now) >= 3000:  # wait 3 seconds before being able to kill again
+            return True 
+        else: 
+            return False 
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))
         return None 
-
-class ShapeShifter(Sprite): 
-    def __init__(self, img, x, y, width, height, window): 
-        self.img = img 
-        self.x = x 
-        self.y = y 
-        self.width = width
-        self.height = height 
-        self.window = window 
-
-    def draw(self): 
-        self.window.blit(self.img, (self.x, self.y))

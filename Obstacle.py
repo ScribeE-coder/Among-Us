@@ -56,4 +56,4 @@ class Sprite_Obstacle(Obstacle):
         elif self == other: 
             return False 
         else: 
-            return self.rect.colliderect(other.rect)
+            return self.rect.colliderect(other.rect) # type: ignore
