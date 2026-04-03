@@ -301,7 +301,7 @@ class Monster(Sprite):
         if self.monster_attack_frame_count >= len(self.monster_attack_list): 
             self.attack_complete = True 
             self.attacking = False
-            self.kill_landed = crew.kill_distance_check(self)
+            self.kill_landed = crew.kill_distance_check(self) # checking whether imp actually killed someone while animation played not after 
             self.monster = self.stationary_monster
         return
 
@@ -324,13 +324,6 @@ class Monster(Sprite):
             if colliding: 
                 return True 
         return False 
-    
-    def vent_animation(self): 
-        raise NotImplementedError
-    
-    #TODO: monsters need to be able to use vents 
-    def vent(self): 
-        raise NotImplementedError
     
     def kill_cooldown_check(self): 
         now = pygame.time.get_ticks() 
