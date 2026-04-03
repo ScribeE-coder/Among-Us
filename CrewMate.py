@@ -54,6 +54,7 @@ class CrewMate(Sprite):
         self.has_tasks = True 
 
         self.ghosty = None 
+        self.is_ghost = False 
 
     def update_animation(self): 
         now = pygame.time.get_ticks()
@@ -188,6 +189,7 @@ class CrewMate(Sprite):
             self.killed_animation_complete = True  
             self.killed_animation_playing = False
             self.crew = self.ghosty
+            self.is_ghost = True 
         return None 
     
     def kill_distance_check(self, imp): 
