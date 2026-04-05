@@ -110,7 +110,7 @@ yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_HEI
 stat_ghosty = load_img('images/stationary_ghost.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 yellow_crew.ghosty = stat_ghosty # type: ignore
 
-monster_imp = Monster(monster_transform_list[0], 350, 380, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
+monster_imp = Monster(monster_transform_list[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle
 monster_imp.regular_imp_left = crew_walking_left # type: ignore
 monster_imp.regular_imp_right = crew_walking_right # type: ignore
@@ -185,18 +185,18 @@ while running:
 
     yellow_crew.crew_move(keys)
     
+    if yellow_crew.is_ghost: 
+        
     """Need to figure out a way to stop it from waiting until distance check is true and then letting imp kill"""
 
+
     if monster_imp.kill_landed:
-        yellow_crew.been_killed(monster_imp)  
+        yellow_crew.killed_animation_playing = True 
+        monster_imp.kill_landed = False 
 
     if yellow_crew.killed_animation_playing: 
         yellow_crew.killed_animation()
     
-    if yellow_crew.is_ghost: 
-        # yellow crew needs to be turned into ghost 
-        break 
-
     draw()
     pygame.display.update()
     clock.tick(60)

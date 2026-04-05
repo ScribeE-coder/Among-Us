@@ -302,6 +302,7 @@ class Monster(Sprite):
             self.attack_complete = True 
             self.attacking = False
             self.kill_landed = crew.kill_distance_check(self) # checking whether imp actually killed someone while animation played not after 
+            print(self.kill_landed)
             self.monster = self.stationary_monster
         return
 

@@ -193,8 +193,8 @@ class CrewMate(Sprite):
         return None 
     
     def kill_distance_check(self, imp): 
-        distance = 5
-        if abs(self.x - imp.x) <= distance or abs(self.y - imp.y) <= distance: 
+        distance = 60
+        if abs(self.x - imp.x) <= distance and abs(self.y - imp.y) <= distance: 
             return True 
         else: 
             return False
@@ -203,7 +203,6 @@ class CrewMate(Sprite):
         # if imp is within a certain distance of crew, that means crew was killed 
         if self.kill_distance_check(imp) and not self.killed_animation_complete:  
             self.killed_animation_playing = True 
-            self.is_ghost = True 
         return None 
         
     def crew_draw(self): 
