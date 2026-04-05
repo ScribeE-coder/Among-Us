@@ -44,8 +44,6 @@ class Ghost(Sprite):
             self.ghost_time = now 
             self.current_animation_frame = (self.current_animation_frame + 1) % len(self.ghost_animation_listy) 
             self.animation_frame_count += 1 
-        
-
 
     # if ghost still has tasks those tasks should still be displayed 
     def still_tasks(self): 

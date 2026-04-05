@@ -184,8 +184,6 @@ while running:
         monster_imp.monster_move(keys)
 
     yellow_crew.crew_move(keys)
-    
-    if yellow_crew.is_ghost: 
         
     """Need to figure out a way to stop it from waiting until distance check is true and then letting imp kill"""
 

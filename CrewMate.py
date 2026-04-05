@@ -188,6 +188,7 @@ class CrewMate(Sprite):
         if self.killed_animation_frame_count >= len(self.killed_animation_list):
             self.killed_animation_complete = True  
             self.killed_animation_playing = False
+            # take out when you finish implementing ghost class 
             self.crew = self.ghosty
             self.is_ghost = True 
         return None 
