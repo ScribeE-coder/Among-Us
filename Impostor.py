@@ -5,7 +5,7 @@ from Sprite import Sprite
 # walking right and left defaulted to None for now working on monster transform
 class Impostor(Sprite): 
     def __init__(self, imp_img, x, y, width, height, window, walk_right, walk_left, speed=2): 
-        super().__init__(imp_img, x, y, width, height, walk_right, walk_left, window)
+        super().__init__(imp_img, x, y, width, height, walk_right, walk_left, self.obstacles, window)
         self.imp = imp_img 
         self.x = x 
         self.y = y 
@@ -23,6 +23,7 @@ class Impostor(Sprite):
         self.animation_speed = 0.2 
         self.direction = None 
         self.is_moving = False 
+        self.kill_registered = False 
 
         # attributes for collision
         self.obstacles = [] 
@@ -77,26 +78,29 @@ class Impostor(Sprite):
     
     # TODO: will check if imp is colliding with object to stop phasing through objects     
     def collision_check(self): 
-        return False 
+       raise NotImplementedError
     
-    # TODO: checks whether imp is close enough to crew to kill 
-    def crew_proximity_check(self, crew: CrewMate): 
-        prox_range_x = None 
-        prox_range_y = None 
-        
-        if abs(self.x - crew.x) <= prox_range_x: 
-            return True 
-        elif abs(self.y - crew.y) <= prox_range_y: 
+    # this method may not even be necessary 
+    def crew_proximity_check(self, crew): 
+        prox_range_x = 30 
+        prox_range_y = 30 
+
+        if abs(self.x - crew.x) <= prox_range_x and abs(self.y - crew.y) <= prox_range_y: 
             return True 
         else: 
             return False 
     
+    def vent_animation(self): 
+        raise NotImplementedError
+
+    # TODO: all imps and engineers should be able to vent 
+    def vent(self): 
+        raise NotImplementedError
+    
     # TODO: if close to crewmate, kill mechanism otherwise do nothing, will have countdown mechanism 
-    def kill(self): 
-        if self.crew_proximity_check(): 
-            return None 
-        else: 
-            return None 
+    def kill(self, crew): 
+        if self.crew_proximity_check(crew): 
+            raise NotImplementedError
 
     def draw(self): 
         self.window.blit(self.imp, (self.x, self.y)) 
@@ -143,12 +147,14 @@ class Monster(Sprite):
         self.attacking = False 
         self.attack_complete = False # having has_attacked attribute will be useful for countdown mechanics later 
         self.current_attack_frame = 0 
-        self.attack_frame_count = 0 
 
-        # rectangle for collision purposes
+        # rectangle for collision detection purposes
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.obstacles = [] # list of obstacles needed for collision
         self.radius = self.width / 2 
+
+        self.attack_cooldown = 0
+        self.kill_landed = False 
 
     def create_monster_attack_direction(self): 
         if self.monster_attack_list: 
@@ -194,32 +200,32 @@ class Monster(Sprite):
                     self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
                 
                 elif not self.animation_complete:
-                    self.current_frame = (self.current_frame + 1) % len(self.regular_imp_right)
+                    self.current_frame = (self.current_frame + 1) % len(self.regular_imp_right) # type: ignore
 
         # set current image based on direction
         if self.direction == "right": 
             if self.animation_complete: 
                 self.monster = self.walk_right[self.current_frame]
             else:
-                self.monster = self.regular_imp_right[self.current_frame] 
+                self.monster = self.regular_imp_right[self.current_frame]  # type: ignore
         
         elif self.direction == "left": 
             if self.animation_complete:
                 self.monster = self.walk_left[self.current_frame]
             else: 
-                self.monster = self.regular_imp_left[self.current_frame]
+                self.monster = self.regular_imp_left[self.current_frame] # type: ignore
         
         elif self.direction == "up":
             if self.animation_complete: 
                 self.monster = self.walk_right[self.current_frame]
             else: 
-                self.monster = self.regular_imp_right[self.current_frame]
+                self.monster = self.regular_imp_right[self.current_frame] # type: ignore
         
         elif self.direction == "down": 
             if self.animation_complete:
                 self.monster = self.walk_left[self.current_frame] 
             else: 
-                self.monster = self.regular_imp_left[self.current_frame] 
+                self.monster = self.regular_imp_left[self.current_frame]  # type: ignore
 
     def monster_move(self, keys): 
         self.is_moving = False
@@ -273,7 +279,7 @@ class Monster(Sprite):
         elif not self.is_moving and not self.animation_complete: 
             self.monster = self.stationary_imp      
 
-    def attack_animation(self): 
+    def attack_animation(self, crew): 
         now = pygame.time.get_ticks() 
 
         if now - self.last_update > 100: 
@@ -295,38 +301,39 @@ class Monster(Sprite):
         if self.monster_attack_frame_count >= len(self.monster_attack_list): 
             self.attack_complete = True 
             self.attacking = False
+            self.kill_landed = crew.kill_distance_check(self) # checking whether imp actually killed someone while animation played not after 
+            print(self.kill_landed)
             self.monster = self.stationary_monster
+        return
 
-    def attack(self): 
-            # shouldn't be able to use attack if you haven't transformed
-            if not self.animation_playing and not self.animation_complete: 
-                return None 
+    def attack(self, crew): 
+        # shouldn't be able to use attack if you haven't transformed
+        self.attack_cooldown = pygame.time.get_ticks() 
+        
+        if not self.animation_playing and not self.animation_complete: 
+            return None 
                  
-            if len(self.monster_attack_list) != 0: 
-                self.create_monster_attack_direction() 
-            self.attack_animation()
-            return None  
+        if len(self.monster_attack_list) != 0: 
+            self.create_monster_attack_direction() 
+            self.attack_animation(crew)
+        
+        return None  
 
-    def collision_check(self, obstacles): 
+    def collision_check(self:Sprite, obstacles):  # type: ignore
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)
             if colliding: 
                 return True 
+        return False 
+    
+    def kill_cooldown_check(self): 
+        now = pygame.time.get_ticks() 
+        """if the number of miliseconds between when attack was first called and now is >= x, then imp can attack again"""
+        if abs(self.attack_cooldown - now) >= 3000:  # wait 3 seconds before being able to kill again
+            return True 
         else: 
             return False 
 
     def draw(self): 
         self.window.blit(self.monster, (self.x, self.y))
         return None 
-
-class ShapeShifter(Sprite): 
-    def __init__(self, img, x, y, width, height, window): 
-        self.img = img 
-        self.x = x 
-        self.y = y 
-        self.width = width
-        self.height = height 
-        self.window = window 
-
-    def draw(self): 
-        self.window.blit(self.img, (self.x, self.y))

@@ -3,7 +3,7 @@ import pygame, math, Sprite
 from Sprite import Sprite
 
 class CrewMate(Sprite): 
-    def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, obstacles, window, speed=2): 
+    def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, obstacles, window, crewDead_listy): 
         super().__init__(crew_img, x, y, width, height, walk_right, walk_left, obstacles, window)
         self.crew = crew_img 
         self.stationary_crew = crew_img # need this so animation cycle doesn't freeze mid sprite when no movement detected
@@ -11,7 +11,7 @@ class CrewMate(Sprite):
         self.y = y 
         self.width = width 
         self.height = height 
-        self.speed = speed
+        self.speed = 2
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
 
         # crewmate collision properties 
@@ -26,11 +26,12 @@ class CrewMate(Sprite):
         self.walk_up = self.walk_right
         self.walk_down = self.walk_left 
 
-        # attributes for being killed animation 
-        self.killed = False 
         self.current_frame = 0 
-        self.current_kill_frame = 0 
-        self.killed_animation_list = [] 
+
+        # attributes for being killed animation  
+        self.current_killed_animation_frame = 0 
+        self.killed_animation_frame_count = 0
+        self.killed_animation_list = crewDead_listy 
         self.killed_animation_complete = False 
         self.killed_animation_playing = False 
         
@@ -40,6 +41,8 @@ class CrewMate(Sprite):
         # timer that keeps track of when pygame started up (in miliseconds)
         self.last_update = pygame.time.get_ticks() 
 
+        self.killed_last_update = pygame.time.get_ticks()
+
         # direction tracking
         self.direction = None 
         self.is_moving = False 
@@ -47,8 +50,11 @@ class CrewMate(Sprite):
         self.obstacles = obstacles 
         self.window = window
 
-        self.tasks = [] 
+        self.tasks = ["Clean the bathroom", "Do crack", "Shoot the president", "Fuck you're mom"] 
         self.has_tasks = True 
+
+        self.ghosty = None 
+        self.is_ghost = False 
 
     def update_animation(self): 
         now = pygame.time.get_ticks()
@@ -62,20 +68,19 @@ class CrewMate(Sprite):
         0 when we reach the end of the list no index range errors"""
 
         # set current image based on direction
-        if self.direction == "right": 
+        if self.direction == "right" and not self.killed_animation_playing and not self.killed_animation_complete:
             self.crew = self.walk_right[self.current_frame]
-        
-        elif self.direction == "left": 
+
+        elif self.direction == "left" and not self.killed_animation_playing and not self.killed_animation_complete:
             self.crew = self.walk_left[self.current_frame]
-        
-        elif self.direction == "up": 
+
+        elif self.direction == "up" and not self.killed_animation_playing and not self.killed_animation_complete:
             self.crew = self.walk_right[self.current_frame]
-        
-        elif self.direction == "down": 
-            self.crew = self.walk_left[self.current_frame] 
+
+        elif self.direction == "down" and not self.killed_animation_playing and not self.killed_animation_complete:
+            self.crew = self.walk_left[self.current_frame]
     
-    # TODO: check for whether crewmate is colliding with other objects 
-    def collision_check(self, obstacles):
+    def collision_check(self, obstacles): # type: ignore
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)  
             # if im colliding with an object then you don't need to check for the other objects 
@@ -141,41 +146,64 @@ class CrewMate(Sprite):
             self.update_animation()  
 
         else: 
-            self.crew = self.stationary_crew  
+            if not self.killed_animation_playing and not self.killed_animation_complete:
+                self.crew = self.stationary_crew 
 
-    # TODO: play kill animation when crewmate is killed 
-    def kill_animation(self): 
-        now = pygame.time.get_ticks()
-        if now - self.last_update > 100: 
-            self.last_update = now 
-            self.current_killed_frame = (self.current_kill_frame + 1) % len(self.killed_animation_list)
-            self.current_killed_frame += 1 
-
-            self.img = self.killed_animation_list[self.current_killed_frame]
-            if self.current_killed_frame >= len(self.killed_animation_list):
-                self.killed_animation_complete = True  
-                self.killed_animation_playing = False
-
+    def load_kill_animation(self, listy): 
+        self.killed_animation_list = listy 
+        return None 
+    
+    # TODO: add tasks to crew 
+    def add_tasks(self, task): 
+        self.tasks.append(task)
+        return self.tasks 
+    
     # TODO: displaying current tasks on screen
     def display_tasks(self): 
-        return None
+        raise NotImplementedError 
 
     # TODO: as player completes tasks, they should be removed from task list 
     def update_tasks(self): 
+        raise NotImplementedError
+
+    def killed_animation(self): 
+        self.time_of_death = pygame.time.get_ticks() 
+        
+        if self.killed_animation_complete: 
+            return None 
+        
+        if not self.killed_animation_complete: 
+            self.killed_animation_playing = True 
+
+        now = pygame.time.get_ticks()
+        
+        if now - self.killed_last_update > 200: 
+            self.killed_last_update = now 
+            self.current_killed_animation_frame = (self.current_killed_animation_frame + 1) % len(self.killed_animation_list)
+            self.killed_animation_frame_count += 1 
+            
+            self.crew = self.killed_animation_list[self.current_killed_animation_frame] 
+
+        # check if we've gone through all the frames 
+        if self.killed_animation_frame_count >= len(self.killed_animation_list):
+            self.killed_animation_complete = True  
+            self.killed_animation_playing = False
+            # take out when you finish implementing ghost class 
+            self.crew = self.ghosty
+            self.is_ghost = True 
         return None 
     
     def kill_distance_check(self, imp): 
-        distance = 0.5 
-        if self.x - imp.x <= distance and self.y - imp.y <= distance: 
-            return True
+        distance = 60
+        if abs(self.x - imp.x) <= distance and abs(self.y - imp.y) <= distance: 
+            return True 
         else: 
-            return False 
+            return False
     
     def been_killed(self, imp): 
         # if imp is within a certain distance of crew, that means crew was killed 
-        if self.kill_distance_check(imp): 
-            self.killed = True 
-            self.kill_animation()
+        if self.kill_distance_check(imp) and not self.killed_animation_complete:  
+            self.killed_animation_playing = True 
         return None 
         
     def crew_draw(self): 
