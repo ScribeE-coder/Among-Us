@@ -34,7 +34,6 @@ crew_walk5 = load_img("images/crewWalk5.png", SCREEN_WIDTH/divisor, SCREEN_HEIGH
 crew_walk6 = load_img("images/crewWalk6.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 crew_walk7 = load_img("images/crewWalk7.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-
 crew_walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
 crew_walking_left = [pygame.transform.flip(sprite, True, False) for sprite in crew_walking_right]
 
@@ -95,6 +94,26 @@ crewDead9 = load_img('images/crewDead9.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT
 
 crewDead_listy = [crewDead1, crewDead2, crewDead3, crewDead4, crewDead5, crewDead6, crewDead7, crewDead8, crewDead9] 
 
+ghost1 = load_img('images/ghost1.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost2 = load_img('images/ghost2.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost3 = load_img('images/ghost3.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost4 = load_img('images/ghost4.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost5 = load_img('images/ghost5.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost6 = load_img('images/ghost6.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost7 = load_img('images/ghost7.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost8 = load_img('images/ghost8.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost9 = load_img('images/ghost9.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost10 = load_img('images/ghost10.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost11 = load_img('images/ghost11.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost12 = load_img('images/ghost12.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost13 = load_img('images/ghost13.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost14 = load_img('images/ghost14.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost15 = load_img('images/ghost15.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+ghost16 = load_img('images/ghost16.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+
+ghost_listy_right = [ghost1, ghost2, ghost3, ghost4, ghost5, ghost6, ghost7, ghost8, ghost9, ghost10, ghost11, ghost12, ghost13, ghost14, ghost15, ghost16]
+ghost_listy_left = [pygame.transform.flip(ghost, True, False) for ghost in ghost_listy_right]
+
 obstacles = [] 
 
 centers = {"upper_right": (443, 180), 
@@ -108,7 +127,8 @@ table_radius = 50
     
 yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDead_listy) 
 stat_ghosty = load_img('images/stationary_ghost.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-yellow_crew.ghosty = stat_ghosty # type: ignore
+yellow_crew.ghosty = stat_ghosty 
+
 
 monster_imp = Monster(monster_transform_list[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monster_attack_cycle
@@ -183,17 +203,20 @@ while running:
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
-    yellow_crew.crew_move(keys)
-        
-    """Need to figure out a way to stop it from waiting until distance check is true and then letting imp kill"""
-
+    yellow_crew.crew_move(keys) # type: ignore
 
     if monster_imp.kill_landed:
-        yellow_crew.killed_animation_playing = True 
+        yellow_crew.killed_animation_playing = True  # type: ignore
         monster_imp.kill_landed = False 
 
-    if yellow_crew.killed_animation_playing: 
-        yellow_crew.killed_animation()
+    if yellow_crew.killed_animation_playing:  # type: ignore
+        yellow_crew.killed_animation() # type: ignore
+
+        # crew mate now needs to be a ghost for the rest of the game 
+        if yellow_crew.killed_animation_complete: 
+            yellow_ghosty = Ghost.Ghost(yellow_crew.ghosty, "crew", yellow_crew.x, yellow_crew.y, yellow_crew.tasks, ghost_listy_left, ghost_listy_right, window)
+            yellow_crew = yellow_ghosty
+
     
     draw()
     pygame.display.update()
