@@ -3,10 +3,10 @@ import pygame, math, Sprite
 from Sprite import Sprite
 
 class CrewMate(Sprite): 
-    def __init__(self, crew_img, x, y, width, height, walk_right, walk_left, obstacles, window, crewDead_listy): 
-        super().__init__(crew_img, x, y, width, height, walk_right, walk_left, obstacles, window)
-        self.crew = crew_img 
-        self.stationary_crew = crew_img # need this so animation cycle doesn't freeze mid sprite when no movement detected
+    def __init__(self, img, x, y, width, height, walk_right, walk_left, obstacles, window, dead_listy): 
+        super().__init__(img, x, y, width, height, walk_right, walk_left, obstacles, window)
+        self.img = img 
+        self.stationary_crew = img # need this so animation cycle doesn't freeze mid sprite when no movement detected
         self.x = x 
         self.y = y 
         self.width = width 
@@ -31,7 +31,7 @@ class CrewMate(Sprite):
         # attributes for being killed animation  
         self.current_killed_animation_frame = 0 
         self.killed_animation_frame_count = 0
-        self.killed_animation_list = crewDead_listy 
+        self.killed_animation_list = dead_listy 
         self.killed_animation_complete = False 
         self.killed_animation_playing = False 
         
@@ -53,7 +53,7 @@ class CrewMate(Sprite):
         self.tasks = ["Clean the bathroom", "Do crack", "Shoot the president", "Fuck you're mom"] 
         self.has_tasks = True 
 
-        self.ghosty = None 
+        self.ghosty = False
         self.is_ghost = False 
 
     def update_animation(self): 
@@ -88,7 +88,7 @@ class CrewMate(Sprite):
                 return True 
         return False
     
-    def crew_move(self, keys): 
+    def move(self, keys): 
         self.is_moving = False
         old_x = self.x  
         old_y = self.y 
@@ -200,6 +200,6 @@ class CrewMate(Sprite):
         else: 
             return False
         
-    def crew_draw(self): 
+    def draw(self): 
         self.window.blit(self.crew, (self.x, self.y))
         return None 

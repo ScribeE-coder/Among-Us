@@ -1,30 +1,44 @@
-import pygame, Sprite 
+import pygame, Sprite, CrewMate
 
 from Sprite import Sprite 
 
+""" Ghost class will need to be general enough to apply to both crew and imps"""
+
 class Ghost(Sprite): 
-    def __init__(self, ghost_img, ghost_type, x, y, tasks:list, fly_left, fly_right, window): 
+    def __init__(self, img, x, y, width, height, walk_right, walk_left, ghost_type, tasks, window): 
         self.ghost_type = ghost_type # ghosts can either be crew or impostors 
-        self.ghost_img = ghost_img 
+        self.img = img 
         self.x = x 
         self.y = y
-        self.width = 0 
-        self.height = 0  
+        self.width = width 
+        self.height = height  
         self.tasks = tasks 
-        self.has_tasks = True 
-        self.fly_left = fly_left 
-        self.fly_right = fly_right
+        self.walk_right = walk_right 
+        self.walk_left = walk_left
+        self.walk_up = self.walk_right 
+        self.walk_down = self.walk_left
+        self.ghost_type = ghost_type 
+        self.tasks = tasks 
         self.window = window 
-
-        # checking whether ghosts still has tasks left 
-        self.has_tasks = True 
 
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height) 
         self.ghost_time = pygame.time.get_ticks() 
 
         self.ghost_animation_listy = []
+        self.current_frame = 0
+        self.last_update = pygame.time.get_ticks()
 
-    def ghost_move(self, keys): 
+        # guards against crewmate animation checks running after transition
+        self.killed_animation_playing = False
+        self.killed_animation_complete = False
+    
+
+    # will update this later when crew tasks are fully implemented 
+    def tasks_empty(self): 
+        if not self.tasks: 
+            return 0 
+
+    def move(self, keys): 
         if keys[pygame.K_w]: 
             self.y -= 1 
         
@@ -36,7 +50,6 @@ class Ghost(Sprite):
         
         if keys[pygame.K_d]: 
             self.x += 1 
-
 
     def ghost_animation(self): 
         now = pygame.time.get_ticks() 
@@ -56,5 +69,5 @@ class Ghost(Sprite):
     def display_tasks(self): 
         raise NotImplementedError
         
-    def ghost_draw(self): 
-        self.window.blit(self.ghost_img, (self.x, self.y))
+    def draw(self): 
+        self.window.blit(self.img, (self.x, self.y))

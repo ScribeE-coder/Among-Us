@@ -159,7 +159,7 @@ tracker = 0
  # put your images on your created display    
 def draw(): 
     window.blit(cafeteria, (0, 0))
-    yellow_crew.crew_draw()  # type: ignore
+    yellow_crew.draw() 
     monster_imp.draw()
     
     """ Drawing to see where exactly boundaries are for collision detection
@@ -203,7 +203,7 @@ while running:
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
-    yellow_crew.crew_move(keys) # type: ignore
+    yellow_crew.move(keys) # type: ignore
 
     if monster_imp.kill_landed:
         yellow_crew.killed_animation_playing = True  # type: ignore
@@ -213,10 +213,10 @@ while running:
         yellow_crew.killed_animation() # type: ignore
 
         # crew mate now needs to be a ghost for the rest of the game 
+        
         if yellow_crew.killed_animation_complete: 
-            yellow_ghosty = Ghost.Ghost(yellow_crew.ghosty, "crew", yellow_crew.x, yellow_crew.y, yellow_crew.tasks, ghost_listy_left, ghost_listy_right, window)
+            yellow_ghosty = Ghost.Ghost(yellow_crew.ghosty, yellow_crew.x, yellow_crew.y, yellow_crew.width, yellow_crew.height, ghost_listy_right, ghost_listy_left, "crew", [], window)
             yellow_crew = yellow_ghosty
-
     
     draw()
     pygame.display.update()
