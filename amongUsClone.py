@@ -1,10 +1,8 @@
 import pygame, math, os
-
 import CrewMate, Impostor, Ghost
-
 from Obstacle import Circular_Obstacle, Rectangle_Obstacle
-
 from Impostor import Monster
+from image_loading import load_sequence
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 640 
@@ -15,11 +13,7 @@ window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Among Us Clone")
 clock = pygame.time.Clock()
 
-# function makes file clean and easier to read 
-def load_img(file_path, scale_width, scale_height): 
-    img = pygame.image.load(file_path)
-    img = pygame.transform.scale(img, ((scale_width, scale_height)))
-    return img 
+cafeteria = load_sequence("amongUs_cafeteria", 1, SCREEN_WIDTH, SCREEN_HEIGHT) 
 
 cafeteria = load_img("images/amongUS_caf.PNG", SCREEN_WIDTH, SCREEN_HEIGHT) 
 
