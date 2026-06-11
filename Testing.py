@@ -40,13 +40,21 @@ upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("
 bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius)  # type: ignore
 bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius)  # type: ignore
 
-tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
+tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table] 
+
+doorToMedBayHallway = Rectangle_Obstacle(9, 309, 30, 30)
+doorToStorageHallway = Rectangle_Obstacle(321, 625, 30, 30)
+doortoAsteroidsHallway = Rectangle_Obstacle(629, 313, 30, 30)
+doorToUpperEHallway = Rectangle_Obstacle(424, 414, 30, 30)
+
 rooms = {
-    "cafeteria": [cafeteria, tables, {"doorToMedBayHallway": (9, 309), 
-                                      "doorToStorageHallway": (321, 625), 
-                                      "doortoAsteroidsHallway": (629, 313)}], 
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"doorToMedBay": (424, 414)}]
+    "cafeteria": [cafeteria, tables, [doorToMedBayHallway, doorToStorageHallway, doortoAsteroidsHallway]], 
+    
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, [doorToUpperEHallway]] 
          } 
+
+""" in order to switch rooms need to create a rectangle object associated with the coordinates for each hallway; once you have that rectangle object, you then need to check 
+for whether the player is colliding with that rectangle; if so, switch rooms"""
 
 test_crew = CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor, crew_walking_right, crew_walking_left, obstacles, window, crewDeadListy)
 
@@ -54,6 +62,9 @@ def draw(imgs, xcor, ycor):
     for img in imgs: 
         window.blit(img, (xcor, ycor))
     test_crew.draw()
+
+curr_room = rooms["cafeteria"][0] #always starts off in the cafeteria [cafeteria, tables, dictionary]
+curr_room_stringy = "cafeteria"
     
 running = True 
 while running: 
@@ -64,12 +75,16 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN: 
             pos = pygame.mouse.get_pos()
             print(pos)
-
-    test_crew.move(keys)
-    if test_crew.x < rooms["caf_upperE_medbay_hallway"][2]["doorToMedBay"][0] and test_crew.y < rooms["caf_upperE_medbay_hallway"][2]["doorToMedBay"][1]: 
-        draw(cafeteriaUpperEMedbayHallway1, 0, 0)
-    else: 
-         draw(cafeteria, 0, 0)
     
+    draw(curr_room, 0, 0)
+    test_crew.move(keys)
+    curr_hallways_available = rooms[curr_room_stringy][2] # [cafeteria, tables, [available hallways]]
+    """ current issues with this approach: pictures of hallways just spawn in they're not following crewmate, bleeding through the cafeteria image, and when checking for 
+    collision you can't go back to the cafeteria the same way and you'd need to know what the curr_room is in order to find it in the dictionary (not a huge issue now but will 
+    become an issue later when other rooms are added you won't automatically know the name of the room you're supposed to be indexing into); also it's spawning in one hallway for
+    all of the entry points in cafeteria despite the fact that those are different hallways"""
+    for room in curr_hallways_available: 
+        if test_crew.rect.colliderect(room): 
+            curr_room = rooms["caf_upperE_medbay_hallway"][0] # [cafeteriaUpperEMedbayHallway1, None, [doorToUpperEHallway]] 
     pygame.display.update() 
     clock.tick(60) 
