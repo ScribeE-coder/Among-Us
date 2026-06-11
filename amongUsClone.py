@@ -77,13 +77,15 @@ caf_obstacles.append(caf_rect_obstacle)
 monster_imp.obstacles = caf_obstacles
 tracker = 0 
 
-# rooms need background image, obstacle list, doors 
+# rooms need background image, obstacle list, doors
+"""
 rooms = {
     "cafeteria": [cafeteria, tables, {"doorToMedBayHallway": (9, 309), 
                                       "doorToStorageHallway": (321, 625), 
                                       "doortoAsteroidsHallway": (629, 313)}], 
     "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"doorToMedBay": (424, 414)}]
          }
+""" 
 
 current_room = cafeteria[0]
 

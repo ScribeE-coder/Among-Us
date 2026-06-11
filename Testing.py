@@ -48,9 +48,9 @@ doortoAsteroidsHallway = Rectangle_Obstacle(629, 313, 30, 30)
 doorToUpperEHallway = Rectangle_Obstacle(424, 414, 30, 30)
 
 rooms = {
-    "cafeteria": [cafeteria, tables, [doorToMedBayHallway, doorToStorageHallway, doortoAsteroidsHallway]], 
+    "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": doorToMedBayHallway}], 
     
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, [doorToUpperEHallway]] 
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": doorToUpperEHallway}] 
          } 
 
 """ in order to switch rooms need to create a rectangle object associated with the coordinates for each hallway; once you have that rectangle object, you then need to check 
@@ -76,15 +76,18 @@ while running:
             pos = pygame.mouse.get_pos()
             print(pos)
     
+    window.fill((0, 0, 0)) # fill the entire screen with black before drawing any rooms to prevent images bleeding through each other 
     draw(curr_room, 0, 0)
     test_crew.move(keys)
-    curr_hallways_available = rooms[curr_room_stringy][2] # [cafeteria, tables, [available hallways]]
+    curr_hallways_available = rooms[curr_room_stringy][2] # {"hallway_name": coordinates ~ Rectangle_Obstacle}
+    
     """ current issues with this approach: pictures of hallways just spawn in they're not following crewmate, bleeding through the cafeteria image, and when checking for 
     collision you can't go back to the cafeteria the same way and you'd need to know what the curr_room is in order to find it in the dictionary (not a huge issue now but will 
     become an issue later when other rooms are added you won't automatically know the name of the room you're supposed to be indexing into); also it's spawning in one hallway for
     all of the entry points in cafeteria despite the fact that those are different hallways"""
-    for room in curr_hallways_available: 
-        if test_crew.rect.colliderect(room): 
-            curr_room = rooms["caf_upperE_medbay_hallway"][0] # [cafeteriaUpperEMedbayHallway1, None, [doorToUpperEHallway]] 
+    for name, door in curr_hallways_available.items(): 
+        if test_crew.rect.colliderect(door.rect):
+            curr_room_stringy = name  
+            curr_room = rooms[curr_room_stringy][0] 
     pygame.display.update() 
     clock.tick(60) 
