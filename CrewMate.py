@@ -53,7 +53,7 @@ class CrewMate(Sprite):
         self.tasks = ["Clean the bathroom", "Do crack", "Shoot the president", "Fuck you're mom"] 
         self.has_tasks = True 
 
-        self.ghosty = False
+        self.ghosty = self.img
         self.is_ghost = False 
 
     def update_animation(self): 
@@ -201,5 +201,6 @@ class CrewMate(Sprite):
             return False
         
     def draw(self): 
-        self.window.blit(self.crew, (self.x, self.y))
+        for img in self.img: 
+            self.window.blit(img, (self.x, self.y))
         return None 

@@ -14,99 +14,24 @@ pygame.display.set_caption("Among Us Clone")
 clock = pygame.time.Clock()
 
 cafeteria = load_sequence("amongUs_cafeteria", 1, SCREEN_WIDTH, SCREEN_HEIGHT) 
+idle_crew = load_sequence("idle", 1, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-cafeteria = load_img("images/amongUS_caf.PNG", SCREEN_WIDTH, SCREEN_HEIGHT) 
-
-yellow_crew = load_img("images/amongUs_yellowCrew.jpeg", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-idle_crew = load_img("images/idle.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
-
-crew_walk1 = load_img("images/crewWalk1.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crew_walk2 = load_img("images/crewWalk2.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crew_walk3 = load_img("images/crewWalk3.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crew_walk4 = load_img("images/crewWalk4.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crew_walk5 = load_img("images/crewWalk5.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crew_walk6 = load_img("images/crewWalk6.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crew_walk7 = load_img("images/crewWalk7.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-crew_walking_right = [crew_walk1, crew_walk2, crew_walk3, crew_walk4, crew_walk5, crew_walk6, crew_walk7] 
+crew_walking_right = load_sequence("crewWalk", 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
 crew_walking_left = [pygame.transform.flip(sprite, True, False) for sprite in crew_walking_right]
 
-monsterTransform1 = load_img("images/impTransform1.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform2 = load_img("images/impTransform2.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform3 = load_img("images/impTransform3.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform4 = load_img("images/impTransform4.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform5 = load_img("images/impTransform5.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform6 = load_img("images/impTransform6.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform7 = load_img("images/impTransform7.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform8 = load_img("images/impTransform8.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform9 = load_img("images/impTransform9.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform10 = load_img("images/impTransform10.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform11 = load_img("images/impTransform11.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform12 = load_img("images/impTransform12.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterTransform13 = load_img("images/impTransform13.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+monsterTransformList = load_sequence("impTransform", 13, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-monster_transform_list = [monsterTransform1, monsterTransform2, monsterTransform3, monsterTransform4, monsterTransform5, monsterTransform6, monsterTransform7, monsterTransform8, monsterTransform9, monsterTransform10, monsterTransform11, monsterTransform12, monsterTransform13]
+monster_walk_right = load_sequence("monsterWalk", 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+monster_walk_left = [pygame.transform.flip(sprite, True, False) for sprite in monster_walk_right]
 
-monsterWalk1 = load_img("images/monsterWalk1.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterWalk2 = load_img("images/monsterWalk2.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterWalk3 = load_img("images/monsterWalk3.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterWalk4 = load_img("images/monsterWalk4.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterWalk5 = load_img("images/monsterWalk5.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
-monsterWalk6 = load_img("images/monsterWalk6.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
-monsterWalk7 = load_img("images/monsterWalk7.png", SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+monsterAttackCycle = load_sequence("monsterAttack", 12, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
+crewDeadListy = load_sequence("crewDead", 9, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-monster_walk_right = [monsterWalk1, monsterWalk2, monsterWalk3, monsterWalk4, monsterWalk5, monsterWalk6, monsterWalk7]
-monster_walk_left = [pygame.transform.flip(sprite, True, False) for sprite in monster_walk_right] 
+ghost_listy_right = load_sequence("ghost", 16, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
+ghost_listy_left = [pygame.transform.flip(sprite, True, False) for sprite in ghost_listy_right]
 
-# animation cycle for monster attacking 
-
-monsterAttack1 = load_img('images/monsterAttack1.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack2 = load_img('images/monsterAttack2.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack3 = load_img('images/monsterAttack3.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack4 = load_img('images/monsterAttack4.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack5 = load_img('images/monsterAttack5.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack6 = load_img('images/monsterAttack6.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack7 = load_img('images/monsterAttack7.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack8 = load_img('images/monsterAttack8.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack9 = load_img('images/monsterAttack9.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack10 = load_img('images/monsterAttack10.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack11 = load_img('images/monsterAttack11.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monsterAttack12 = load_img('images/monsterAttack12.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-monster_attack_cycle = [monsterAttack1, monsterAttack2, monsterAttack3, monsterAttack4, monsterAttack5, monsterAttack6, monsterAttack7, monsterAttack8, monsterAttack9, monsterAttack10, monsterAttack11, monsterAttack12]
-
-crewDead1 = load_img('images/crewDead1.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crewDead2 = load_img('images/crewDead2.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crewDead3 = load_img('images/crewDead4.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crewDead4 = load_img('images/crewDead4.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crewDead5 = load_img('images/crewDead5.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crewDead6 = load_img('images/crewDead6.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-crewDead7 = load_img('images/crewDead7.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
-crewDead8 = load_img('images/crewDead8.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
-crewDead9 = load_img('images/crewDead9.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-crewDead_listy = [crewDead1, crewDead2, crewDead3, crewDead4, crewDead5, crewDead6, crewDead7, crewDead8, crewDead9] 
-
-ghost1 = load_img('images/ghost1.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost2 = load_img('images/ghost2.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost3 = load_img('images/ghost3.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost4 = load_img('images/ghost4.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost5 = load_img('images/ghost5.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost6 = load_img('images/ghost6.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost7 = load_img('images/ghost7.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost8 = load_img('images/ghost8.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost9 = load_img('images/ghost9.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost10 = load_img('images/ghost10.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost11 = load_img('images/ghost11.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost12 = load_img('images/ghost12.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost13 = load_img('images/ghost13.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost14 = load_img('images/ghost14.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost15 = load_img('images/ghost15.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-ghost16 = load_img('images/ghost16.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-ghost_listy_right = [ghost1, ghost2, ghost3, ghost4, ghost5, ghost6, ghost7, ghost8, ghost9, ghost10, ghost11, ghost12, ghost13, ghost14, ghost15, ghost16]
-ghost_listy_left = [pygame.transform.flip(ghost, True, False) for ghost in ghost_listy_right]
+stat_ghosty = load_sequence("stationary_ghost", 1, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
 obstacles = [] 
 
@@ -119,13 +44,11 @@ centers = {"upper_right": (443, 180),
 
 table_radius = 50
     
-yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDead_listy) 
-stat_ghosty = load_img('images/stationary_ghost.png', SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDeadListy) 
 yellow_crew.ghosty = stat_ghosty 
 
-
-monster_imp = Monster(monster_transform_list[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monster_transform_list, window, monster_walk_right, monster_walk_left)
-monster_imp.monster_attack_list = monster_attack_cycle
+monster_imp = Monster(monsterTransformList[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monsterTransformList, window, monster_walk_right, monster_walk_left)
+monster_imp.monster_attack_list = monsterAttackCycle
 monster_imp.regular_imp_left = crew_walking_left # type: ignore
 monster_imp.regular_imp_right = crew_walking_right # type: ignore
 
@@ -152,7 +75,8 @@ tracker = 0
 
  # put your images on your created display    
 def draw(): 
-    window.blit(cafeteria, (0, 0))
+    for img in cafeteria: 
+        window.blit(img, (0, 0))
     yellow_crew.draw() 
     monster_imp.draw()
     
