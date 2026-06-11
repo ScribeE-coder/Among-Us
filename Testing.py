@@ -22,11 +22,12 @@ crewDeadListy = load_sequence("crewDead", 9, SCREEN_WIDTH/divisor, SCREEN_HEIGHT
 
 obstacles = [] 
 
-test_crew = CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor, crew_walking_right, crew_walking_left, obstacles, window, crewDeadListy) 
+test_crew = CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor, crew_walking_right, crew_walking_left, obstacles, window, crewDeadListy)
 
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))
+    test_crew.draw()
     
 running = True 
 while running: 
@@ -38,6 +39,6 @@ while running:
     test_crew.move(keys)
     
     draw(cafeteria, 0, 0)
-    draw(yellow_crew, 100, 300)
+    test_crew.draw()
     pygame.display.update() 
     clock.tick(60) 

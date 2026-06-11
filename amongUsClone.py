@@ -1,8 +1,9 @@
 import pygame, math, os
-import CrewMate, Impostor, Ghost
+import CrewMate, Impostor
 from Obstacle import Circular_Obstacle, Rectangle_Obstacle
 from Impostor import Monster
 from image_loading import load_sequence
+from Ghost import Ghost 
 
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 640 
@@ -44,8 +45,8 @@ centers = {"upper_right": (443, 180),
 
 table_radius = 50
     
-yellow_crew = CrewMate.CrewMate(idle_crew, 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDeadListy) 
-yellow_crew.ghosty = stat_ghosty 
+yellow_crew = CrewMate.CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDeadListy)
+yellow_crew.ghosty = stat_ghosty[0]
 
 monster_imp = Monster(monsterTransformList[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monsterTransformList, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monsterAttackCycle
@@ -75,8 +76,7 @@ tracker = 0
 
  # put your images on your created display    
 def draw(): 
-    for img in cafeteria: 
-        window.blit(img, (0, 0))
+    window.blit(cafeteria[0], (0, 0))
     yellow_crew.draw() 
     monster_imp.draw()
     
@@ -133,7 +133,7 @@ while running:
         # crew mate now needs to be a ghost for the rest of the game 
         
         if yellow_crew.killed_animation_complete: 
-            yellow_ghosty = Ghost.Ghost(yellow_crew.ghosty, yellow_crew.x, yellow_crew.y, yellow_crew.width, yellow_crew.height, ghost_listy_right, ghost_listy_left, "crew", [], window)
+            yellow_ghosty = Ghost(yellow_crew.ghosty, yellow_crew.x, yellow_crew.y, yellow_crew.width, yellow_crew.height, ghost_listy_right, ghost_listy_left, "crew", [], window)
             yellow_crew = yellow_ghosty
     
     draw()

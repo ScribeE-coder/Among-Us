@@ -7,6 +7,7 @@ class CrewMate(Sprite):
         super().__init__(img, x, y, width, height, walk_right, walk_left, obstacles, window)
         self.img = img 
         self.stationary_crew = img # need this so animation cycle doesn't freeze mid sprite when no movement detected
+        self.crew = img # current frame being drawn; updated by move()/update_animation()
         self.x = x 
         self.y = y 
         self.width = width 
@@ -200,7 +201,10 @@ class CrewMate(Sprite):
         else: 
             return False
         
-    def draw(self): 
-        for img in self.img: 
-            self.window.blit(img, (self.x, self.y))
-        return None 
+    def draw(self):
+        if type(self.crew) == list:
+            for img in self.crew: 
+                self.window.blit(img, (self.x, self.y))
+        else: 
+            self.window.blit(self.crew, (self.x, self.y))
+        return None
