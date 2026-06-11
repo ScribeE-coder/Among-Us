@@ -35,7 +35,7 @@ ghost_listy_left = [pygame.transform.flip(sprite, True, False) for sprite in gho
 
 stat_ghosty = load_sequence("stationary_ghost", 1, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-cafeteriaUpperEMedbayHallway = load_sequence("cafeteriaUpperEMEedbayHallway", 1, SCREEN_WIDTH, SCREEN_HEIGHT)
+cafeteriaUpperEMedbayHallway1 = load_sequence("cafeteriaUpperEMEedbayHallway", 1, SCREEN_WIDTH, SCREEN_HEIGHT)
 
 caf_obstacles = [] 
 
@@ -82,7 +82,7 @@ rooms = {
     "cafeteria": [cafeteria, tables, {"doorToMedBayHallway": (9, 309), 
                                       "doorToStorageHallway": (321, 625), 
                                       "doortoAsteroidsHallway": (629, 313)}], 
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway, None, None]
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"doorToMedBay": (424, 414)}]
          }
 
 current_room = cafeteria[0]
