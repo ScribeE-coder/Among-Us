@@ -1,15 +1,16 @@
 import pygame, math, os
-import CrewMate, Impostor
+import Impostor 
+from CrewMate import CrewMate 
 from Obstacle import Circular_Obstacle, Rectangle_Obstacle
 from Impostor import Monster
 from image_loading import load_sequence
-from Ghost import Ghost 
+from Ghost import Ghost
 
+pygame.init()
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 640 
 divisor = 15 
 
-pygame.init()
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Among Us Clone")
 clock = pygame.time.Clock()
@@ -34,7 +35,9 @@ ghost_listy_left = [pygame.transform.flip(sprite, True, False) for sprite in gho
 
 stat_ghosty = load_sequence("stationary_ghost", 1, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-obstacles = [] 
+cafeteriaUpperEMedbayHallway = load_sequence("cafeteriaUpperEMEedbayHallway", 1, SCREEN_WIDTH, SCREEN_HEIGHT)
+
+caf_obstacles = [] 
 
 centers = {"upper_right": (443, 180), 
            "emergency": (312, 332),
@@ -45,7 +48,7 @@ centers = {"upper_right": (443, 180),
 
 table_radius = 50
     
-yellow_crew = CrewMate.CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, obstacles, window, crewDeadListy)
+yellow_crew = CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, caf_obstacles, window, crewDeadListy)
 yellow_crew.ghosty = stat_ghosty[0]
 
 monster_imp = Monster(monsterTransformList[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monsterTransformList, window, monster_walk_right, monster_walk_left)
@@ -65,18 +68,29 @@ tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_tab
 vents = {}
 
 for table in tables: 
-    obstacles.append(table)
+    caf_obstacles.append(table)
 
 # rectangular obstacles 
 caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 1)
-obstacles.append(caf_rect_obstacle)
+caf_obstacles.append(caf_rect_obstacle)
 
-monster_imp.obstacles = obstacles
+monster_imp.obstacles = caf_obstacles
 tracker = 0 
+
+# rooms need background image, obstacle list, doors 
+rooms = {
+    "cafeteria": [cafeteria, tables, {"doorToMedBayHallway": (9, 309), 
+                                      "doorToStorageHallway": (321, 625), 
+                                      "doortoAsteroidsHallway": (629, 313)}], 
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway, None, None]
+         }
+
+current_room = cafeteria[0]
+
 
  # put your images on your created display    
 def draw(): 
-    window.blit(cafeteria[0], (0, 0))
+    window.blit(current_room, (0, 0))
     yellow_crew.draw() 
     monster_imp.draw()
     

@@ -51,7 +51,7 @@ class CrewMate(Sprite):
         self.obstacles = obstacles 
         self.window = window
 
-        self.tasks = ["Clean the bathroom", "Do crack", "Shoot the president", "Fuck you're mom"] 
+        self.tasks = []
         self.has_tasks = True 
 
         self.ghosty = self.img
@@ -202,9 +202,5 @@ class CrewMate(Sprite):
             return False
         
     def draw(self):
-        if type(self.crew) == list:
-            for img in self.crew: 
-                self.window.blit(img, (self.x, self.y))
-        else: 
-            self.window.blit(self.crew, (self.x, self.y))
-        return None
+       self.window.blit(self.crew, (self.x, self.y))
+       return None 
