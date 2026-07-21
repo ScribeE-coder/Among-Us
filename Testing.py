@@ -42,15 +42,15 @@ bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table] 
 
-doorToMedBayHallway = Rectangle_Obstacle(9, 309, 30, 30)
-doorToStorageHallway = Rectangle_Obstacle(321, 625, 30, 30)
-doortoAsteroidsHallway = Rectangle_Obstacle(629, 313, 30, 30)
-doorToUpperEHallway = Rectangle_Obstacle(424, 414, 30, 30)
+doorToMedBayHallway = Rectangle_Obstacle(-20, 295, 35, 50)
+doorToStorageHallway = Rectangle_Obstacle(290, 625, 65, 30)
+doortoAsteroidsHallway = Rectangle_Obstacle(629, 285, 65, 60)
+HallwayBackToCaf = Rectangle_Obstacle(626, 301, 800, 30)
 
 rooms = {
     "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": doorToMedBayHallway}], 
     
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": doorToUpperEHallway}] 
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": HallwayBackToCaf}] 
          } 
 
 """ in order to switch rooms need to create a rectangle object associated with the coordinates for each hallway; once you have that rectangle object, you then need to check 
@@ -77,6 +77,7 @@ while running:
             print(pos)
     
     window.fill((0, 0, 0)) # fill the entire screen with black before drawing any rooms to prevent images bleeding through each other 
+    
     draw(curr_room, 0, 0)
     test_crew.move(keys)
     curr_hallways_available = rooms[curr_room_stringy][2] # {"hallway_name": coordinates ~ Rectangle_Obstacle}
@@ -89,5 +90,14 @@ while running:
         if test_crew.rect.colliderect(door.rect):
             curr_room_stringy = name  
             curr_room = rooms[curr_room_stringy][0] 
+    
+    """ need to see where rectangles are for collision purposes"""
+    #pygame.draw.rect(window, (255,0, 0), doorToMedBayHallway.rect, 1)
+    #pygame.draw.rect(window, (255, 0, 0), doorToStorageHallway.rect, 1)
+    #pygame.draw.rect(window, (255, 0, 0), doortoAsteroidsHallway.rect, 1)
+    pygame.draw.rect(window, (255, 0, 0), HallwayBackToCaf.rect, 1)
+    """ current bug I'm noticing is that if you're in medbay hallway for example, the square that directs you back to the cafeteria is the same square as the one that's supposed to direct you
+    to weapons. This will become a huge problem later on so it should probably be fixed as soon as possible."""
+    
     pygame.display.update() 
     clock.tick(60) 

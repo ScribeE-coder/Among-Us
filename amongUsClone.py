@@ -89,7 +89,6 @@ rooms = {
 
 current_room = cafeteria[0]
 
-
  # put your images on your created display    
 def draw(): 
     window.blit(current_room, (0, 0))
@@ -152,6 +151,7 @@ while running:
             yellow_ghosty = Ghost(yellow_crew.ghosty, yellow_crew.x, yellow_crew.y, yellow_crew.width, yellow_crew.height, ghost_listy_right, ghost_listy_left, "crew", [], window)
             yellow_crew = yellow_ghosty
     
+    window.fill((0, 0, 0))
     draw()
     pygame.display.update()
     clock.tick(60)
