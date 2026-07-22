@@ -45,12 +45,13 @@ tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_tab
 doorToMedBayHallway = Rectangle_Obstacle(-20, 295, 35, 50)
 doorToStorageHallway = Rectangle_Obstacle(290, 625, 65, 30)
 doortoAsteroidsHallway = Rectangle_Obstacle(629, 285, 65, 60)
-HallwayBackToCaf = Rectangle_Obstacle(626, 301, 800, 30)
+HallwayBackToCaf = Rectangle_Obstacle(626, 301, 65, 30)
 
+# rooms dictionary needs to include coordinates for where sprite should be after you've moved to a different room
 rooms = {
-    "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": doorToMedBayHallway}], 
+    "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": doorToMedBayHallway},()], 
     
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": HallwayBackToCaf}] 
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": HallwayBackToCaf}, (550, 310)] 
          } 
 
 """ in order to switch rooms need to create a rectangle object associated with the coordinates for each hallway; once you have that rectangle object, you then need to check 
@@ -80,7 +81,7 @@ while running:
     
     draw(curr_room, 0, 0)
     test_crew.move(keys)
-    curr_hallways_available = rooms[curr_room_stringy][2] # {"hallway_name": coordinates ~ Rectangle_Obstacle}
+    curr_hallways_available = rooms[curr_room_stringy][2] # {"caf_upperE_medbay_hallway": doorToMedBayHallway}
     
     """ current issues with this approach: pictures of hallways just spawn in they're not following crewmate, bleeding through the cafeteria image, and when checking for 
     collision you can't go back to the cafeteria the same way and you'd need to know what the curr_room is in order to find it in the dictionary (not a huge issue now but will 
@@ -89,7 +90,9 @@ while running:
     for name, door in curr_hallways_available.items(): 
         if test_crew.rect.colliderect(door.rect):
             curr_room_stringy = name  
-            curr_room = rooms[curr_room_stringy][0] 
+            curr_room = rooms[curr_room_stringy][0] # [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": HallwayBackToCaf}, (550, 310)] 
+            test_crew.x = rooms[curr_room_stringy][3][0]
+            test_crew.y = rooms[curr_room_stringy][3][1] 
     
     """ need to see where rectangles are for collision purposes"""
     #pygame.draw.rect(window, (255,0, 0), doorToMedBayHallway.rect, 1)
