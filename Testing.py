@@ -47,11 +47,12 @@ doorToStorageHallway = Rectangle_Obstacle(290, 625, 65, 30)
 doortoAsteroidsHallway = Rectangle_Obstacle(629, 285, 65, 60)
 HallwayBackToCaf = Rectangle_Obstacle(626, 301, 65, 30)
 
-# rooms dictionary needs to include coordinates for where sprite should be after you've moved to a different room
+""" rooms dictionary includes the name of the room, a list containing the image for that room, any obstacles there, and a dictionary containing the names of connecting hallways, 
+the rectangle corresponding to the door, and the coordinates for where sprite should be once it walks through"""
 rooms = {
-    "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": doorToMedBayHallway},()], 
+    "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": [doorToMedBayHallway, (550, 310)]}], 
     
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": HallwayBackToCaf}, (550, 310)] 
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": [HallwayBackToCaf, (23, 310)]}]
          } 
 
 """ in order to switch rooms need to create a rectangle object associated with the coordinates for each hallway; once you have that rectangle object, you then need to check 
@@ -64,8 +65,8 @@ def draw(imgs, xcor, ycor):
         window.blit(img, (xcor, ycor))
     test_crew.draw()
 
-curr_room = rooms["cafeteria"][0] #always starts off in the cafeteria [cafeteria, tables, dictionary]
-curr_room_stringy = "cafeteria"
+curr_room_img = rooms["cafeteria"][0] #always starts off in the cafeteria [cafeteria, tables, dictionary]
+curr_room_name = "cafeteria"
     
 running = True 
 while running: 
@@ -79,28 +80,24 @@ while running:
     
     window.fill((0, 0, 0)) # fill the entire screen with black before drawing any rooms to prevent images bleeding through each other 
     
-    draw(curr_room, 0, 0)
+    draw(curr_room_img, 0, 0)
     test_crew.move(keys)
-    curr_hallways_available = rooms[curr_room_stringy][2] # {"caf_upperE_medbay_hallway": doorToMedBayHallway}
+    curr_hallways_available = rooms[curr_room_name][2]
     
-    """ current issues with this approach: pictures of hallways just spawn in they're not following crewmate, bleeding through the cafeteria image, and when checking for 
-    collision you can't go back to the cafeteria the same way and you'd need to know what the curr_room is in order to find it in the dictionary (not a huge issue now but will 
-    become an issue later when other rooms are added you won't automatically know the name of the room you're supposed to be indexing into); also it's spawning in one hallway for
-    all of the entry points in cafeteria despite the fact that those are different hallways"""
-    for name, door in curr_hallways_available.items(): 
+    for name, hallway_listy in curr_hallways_available.items(): 
+        door = hallway_listy[0] # this should work as long as the first item of the list is always your rectangle object for collision detection 
         if test_crew.rect.colliderect(door.rect):
-            curr_room_stringy = name  
-            curr_room = rooms[curr_room_stringy][0] # [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": HallwayBackToCaf}, (550, 310)] 
-            test_crew.x = rooms[curr_room_stringy][3][0]
-            test_crew.y = rooms[curr_room_stringy][3][1] 
+            curr_room_name = name  
+            curr_room_img = rooms[curr_room_name][0] 
+
+            test_crew.x = curr_hallways_available[curr_room_name][1][0]
+            test_crew.y = curr_hallways_available[curr_room_name][1][1]
     
     """ need to see where rectangles are for collision purposes"""
     #pygame.draw.rect(window, (255,0, 0), doorToMedBayHallway.rect, 1)
     #pygame.draw.rect(window, (255, 0, 0), doorToStorageHallway.rect, 1)
     #pygame.draw.rect(window, (255, 0, 0), doortoAsteroidsHallway.rect, 1)
     pygame.draw.rect(window, (255, 0, 0), HallwayBackToCaf.rect, 1)
-    """ current bug I'm noticing is that if you're in medbay hallway for example, the square that directs you back to the cafeteria is the same square as the one that's supposed to direct you
-    to weapons. This will become a huge problem later on so it should probably be fixed as soon as possible."""
     
     pygame.display.update() 
     clock.tick(60) 
