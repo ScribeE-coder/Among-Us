@@ -64,6 +64,17 @@ bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
+doorToMedBayHallway = Rectangle_Obstacle(-20, 295, 35, 50)
+doorToStorageHallway = Rectangle_Obstacle(290, 625, 65, 30)
+doortoAsteroidsHallway = Rectangle_Obstacle(629, 285, 65, 60)
+HallwayBackToCaf = Rectangle_Obstacle(626, 301, 65, 30)
+
+rooms = {
+    "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": [doorToMedBayHallway, (550, 310)]}], 
+    
+    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": [HallwayBackToCaf, (23, 310)]}]
+         } 
+
 # storing vent location coordinates with the name of their location to be used later 
 vents = {}
 
@@ -77,28 +88,18 @@ caf_obstacles.append(caf_rect_obstacle)
 monster_imp.obstacles = caf_obstacles
 tracker = 0 
 
-# rooms need background image, obstacle list, doors
-"""
-rooms = {
-    "cafeteria": [cafeteria, tables, {"doorToMedBayHallway": (9, 309), 
-                                      "doorToStorageHallway": (321, 625), 
-                                      "doortoAsteroidsHallway": (629, 313)}], 
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"doorToMedBay": (424, 414)}]
-         }
-""" 
+curr_room = rooms["cafeteria"][0] 
+curr_room_name = "cafeteria"
 
-current_room = cafeteria[0]
 
  # put your images on your created display    
-def draw(): 
-    window.blit(current_room, (0, 0))
+def draw(imgs, xcor, ycor): 
+    for img in imgs: 
+        window.blit(img, (xcor, ycor))
+
     yellow_crew.draw() 
     monster_imp.draw()
     
-    """ Drawing to see where exactly boundaries are for collision detection
-    pygame.draw.rect(window, (255, 0, 0), caf_rect_obstacle.rect, 1)  # Red outline
-    pygame.draw.rect(window, (255, 0, 0), yellow_crew.rect, 2)
-    """ 
 
 running = True 
 while running: 
@@ -136,10 +137,10 @@ while running:
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
-    yellow_crew.move(keys) # type: ignore
+    yellow_crew.move(keys)
 
     if monster_imp.kill_landed:
-        yellow_crew.killed_animation_playing = True  # type: ignore
+        yellow_crew.killed_animation_playing = True 
         monster_imp.kill_landed = False 
 
     if yellow_crew.killed_animation_playing and isinstance(yellow_crew, CrewMate):
