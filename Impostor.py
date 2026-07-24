@@ -139,8 +139,8 @@ class Monster(Sprite):
         self.current_frame = 0 
 
         # will need regular imp walking cycle when transformation hasn't been completed
-        self.regular_imp_right = None 
-        self.regular_imp_left = None 
+        self.regular_imp_right = []
+        self.regular_imp_left = []
 
         # attributes for attacking animation 
         self.monster_attack_list = []

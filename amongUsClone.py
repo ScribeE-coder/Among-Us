@@ -142,8 +142,8 @@ while running:
         yellow_crew.killed_animation_playing = True  # type: ignore
         monster_imp.kill_landed = False 
 
-    if yellow_crew.killed_animation_playing:  # type: ignore
-        yellow_crew.killed_animation() # type: ignore
+    if yellow_crew.killed_animation_playing and isinstance(yellow_crew, CrewMate):
+        yellow_crew.killed_animation()
 
         # crew mate now needs to be a ghost for the rest of the game 
         

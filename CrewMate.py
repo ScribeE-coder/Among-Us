@@ -60,7 +60,7 @@ class CrewMate(Sprite):
     def update_animation(self): 
         now = pygame.time.get_ticks()
 
-        if self.is_moving: 
+        if self.is_moving: # this double check may be redundant since update is called once this check clears 
             if now - self.last_update > 100: # 100 ms = 10 frames per second  
                 self.last_update = now 
                 self.current_frame = (self.current_frame + 1) % len(self.walk_right) 
@@ -82,6 +82,8 @@ class CrewMate(Sprite):
             self.crew = self.walk_left[self.current_frame]
     
     def collision_check(self, obstacles): # type: ignore
+        if not obstacles: 
+            return False 
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)  
             # if im colliding with an object then you don't need to check for the other objects 
