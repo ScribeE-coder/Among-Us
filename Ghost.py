@@ -49,6 +49,7 @@ class Ghost(Sprite):
         old_x = self.x 
         old_y = self.y
         self.is_moving = False 
+        self.direction = 'up'
         
         if keys[pygame.K_w]: 
             self.y -= self.speed
@@ -78,9 +79,8 @@ class Ghost(Sprite):
         self.center_x = self.x + self.width / 2 
         self.center_y = self.y + self.height / 2
 
-        # updating animation
-        if self.is_moving: 
-            self.ghost_animation() 
+        # updating animation 
+        self.ghost_animation() 
 
         return None 
     
