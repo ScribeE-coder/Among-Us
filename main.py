@@ -137,6 +137,7 @@ while running:
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
+    """ Two main issues with room switching: 1.) Right now only crew can room switch 2.) other sprites show up after room switching when there should only be one visible"""
     yellow_crew.move(keys)
 
     if monster_imp.kill_landed:
@@ -147,12 +148,21 @@ while running:
         yellow_crew.killed_animation()
 
         # crew mate now needs to be a ghost for the rest of the game 
-        
         if yellow_crew.killed_animation_complete: 
             yellow_ghosty = Ghost(yellow_crew.ghosty, yellow_crew.x, yellow_crew.y, yellow_crew.width, yellow_crew.height, ghost_listy_right, ghost_listy_left, "crew", [], window)
             yellow_crew = yellow_ghosty
+
+    curr_hallways_available = rooms[curr_room_name][2]
+    for name, hallway_listy in curr_hallways_available.items(): 
+        door = hallway_listy[0]
+        if yellow_crew.rect.colliderect(door.rect): 
+            curr_room_name = name 
+            curr_room = rooms[curr_room_name][0]
+
+            yellow_crew.x = curr_hallways_available[curr_room_name][1][0]
+            yellow_crew.y = curr_hallways_available[curr_room_name][1][1]
     
     window.fill((0, 0, 0))
-    draw()
+    draw(curr_room, 0, 0)
     pygame.display.update()
     clock.tick(60)
