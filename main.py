@@ -91,8 +91,6 @@ tracker = 0
 
 curr_room = rooms["cafeteria"][0] 
 curr_room_name = "cafeteria"
-yellow_crew.room = curr_room_name 
-monster_imp.room = curr_room_name 
 
  # put your images on your created display    
 def draw(imgs, xcor, ycor): 
