@@ -57,6 +57,8 @@ class CrewMate(Sprite):
         self.ghosty = self.img
         self.is_ghost = False 
 
+        self.room = "cafeteria"
+
     def update_animation(self): 
         now = pygame.time.get_ticks()
 

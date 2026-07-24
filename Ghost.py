@@ -34,6 +34,7 @@ class Ghost(Sprite):
         self.killed_animation_complete = False
 
         self.is_moving = False 
+        self.room = "cafeteria"
     
     def tasks_empty(self): 
         if not self.tasks: 

@@ -69,6 +69,7 @@ doorToStorageHallway = Rectangle_Obstacle(290, 625, 65, 30)
 doortoAsteroidsHallway = Rectangle_Obstacle(629, 285, 65, 60)
 HallwayBackToCaf = Rectangle_Obstacle(626, 301, 65, 30)
 
+# TODO: add the rest of the rooms and hallways once you get all the images for this map
 rooms = {
     "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": [doorToMedBayHallway, (550, 310)]}], 
     
@@ -90,16 +91,23 @@ tracker = 0
 
 curr_room = rooms["cafeteria"][0] 
 curr_room_name = "cafeteria"
-
+yellow_crew.room = curr_room_name 
+monster_imp.room = curr_room_name 
 
  # put your images on your created display    
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))
 
-    yellow_crew.draw() 
-    monster_imp.draw()
-    
+    if yellow_crew.room == curr_room_name and monster_imp.room == curr_room_name:
+        yellow_crew.draw()
+        monster_imp.draw()
+
+    elif yellow_crew.room == curr_room_name: 
+        yellow_crew.draw() 
+
+    elif monster_imp.room == curr_room_name: 
+        monster_imp.draw()  
 
 running = True 
 while running: 
@@ -111,7 +119,7 @@ while running:
  
         if event.type == pygame.MOUSEBUTTONDOWN:
             pos = pygame.mouse.get_pos() 
-            print(pos)
+            #print(pos)
         
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_t:
@@ -137,7 +145,6 @@ while running:
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)
 
-    """ Two main issues with room switching: 1.) Right now only crew can room switch 2.) other sprites show up after room switching when there should only be one visible"""
     yellow_crew.move(keys)
 
     if monster_imp.kill_landed:
@@ -158,9 +165,19 @@ while running:
         if yellow_crew.rect.colliderect(door.rect): 
             curr_room_name = name 
             curr_room = rooms[curr_room_name][0]
+            yellow_crew.room = curr_room_name 
 
             yellow_crew.x = curr_hallways_available[curr_room_name][1][0]
             yellow_crew.y = curr_hallways_available[curr_room_name][1][1]
+
+        # should probably find a way to not split these into two different conditionals when they're doing the same thing 
+        elif monster_imp.rect.colliderect(door.rect): 
+            curr_room_name = name 
+            curr_room = rooms[curr_room_name][0]
+            monster_imp.room = curr_room_name 
+
+            monster_imp.x = curr_hallways_available[curr_room_name][1][0]
+            monster_imp.y = curr_hallways_available[curr_room_name][1][1]
     
     window.fill((0, 0, 0))
     draw(curr_room, 0, 0)

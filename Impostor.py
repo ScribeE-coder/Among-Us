@@ -156,6 +156,8 @@ class Monster(Sprite):
         self.attack_cooldown = 0
         self.kill_landed = False 
 
+        self.room = "cafeteria"
+
     def create_monster_attack_direction(self): 
         if self.monster_attack_list: 
             self.monster_attack_right = self.monster_attack_list 
