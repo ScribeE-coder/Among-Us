@@ -3,12 +3,14 @@ from image_loading import load_sequence
 from CrewMate import CrewMate 
 from Obstacle import Obstacle, Rectangle_Obstacle, Circular_Obstacle, Sprite_Obstacle 
 from Impostor import Monster 
+from Vent import Vent 
 
 pygame.init() 
 
 SCREEN_WIDTH = 640 
 SCREEN_HEIGHT = 640 
 divisor = 15
+vent_divisor = 10.5
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
@@ -21,8 +23,20 @@ test_imp_walking_right_imgs = load_sequence('crewWalk', 7, SCREEN_WIDTH/divisor,
 test_imp_walking_left_imgs = [pygame.transform.flip(sprite, True, False) for sprite in test_imp_walking_right_imgs] 
 test_imp_transform_imgs = load_sequence("impTransform", 13, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-# loading in vent sprite sheet 
-vent_animation:list = load_sequence('amongUsVent', 1, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+
+# loading in vent sprite sheet and splitting to get individual images 
+vent_animation_sheet = pygame.image.load("images/amongUsVent1.png") 
+frame_count = 7 # number of frames needed from sprite sheet
+frame_width = vent_animation_sheet.get_width() // frame_count 
+frame_height = vent_animation_sheet.get_height() 
+vent_frames = []
+
+for i in range(frame_count): 
+    x_offset = i * frame_width # walking across sprite sheet 
+    frame_rect = pygame.Rect(x_offset, 0, frame_width, frame_height)
+    frame = vent_animation_sheet.subsurface(frame_rect)
+    frame = pygame.transform.scale(frame, (SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor))
+    vent_frames.append(frame)
 
 table_radius = 50 
 
@@ -53,23 +67,37 @@ rooms = {
          } 
 
 test_imp = Monster(test_imp_img[0], 320, 250, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor, test_imp_transform_imgs, window, test_imp_walking_right_imgs, test_imp_walking_left_imgs)
+test_imp.regular_imp_left = test_imp_walking_left_imgs 
+test_imp.regular_imp_right = test_imp_walking_right_imgs
+
+curr_room_img = rooms["cafeteria"][0]
+curr_room_name = "cafeteria"
+
+caf_vent_img = vent_frames[0]
+caf_vent = Vent(565, 379, SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor, window)
 
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
-        window.blit(img, xcor, ycor)
-
+        window.blit(img, (xcor, ycor))
+    window.blit(caf_vent_img, (565, 379))
     test_imp.draw()
-
-curr_room_img = cafeteria_imgs[0]
-curr_room_name = "cafeteria"
-
 
 running = True 
 while running: 
+    keys = pygame.key.get_pressed()
     for event in pygame.event.get(): 
         if event.type == pygame.QUIT: 
             running = False 
+        elif event.type == pygame.MOUSEBUTTONDOWN: 
+            pos = pygame.mouse.get_pos()
+            print(pos)
 
     window.fill((0, 0, 0))
+    draw(curr_room_img, 0, 0)
+    test_imp.monster_move(keys)
+
+    if caf_vent.open_vent_check(test_imp): 
+        caf_vent.vent_animation()
+
     pygame.display.update() 
     clock.tick(60)

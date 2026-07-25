@@ -35,6 +35,8 @@ class CrewMate(Sprite):
         self.killed_animation_list = dead_listy 
         self.killed_animation_complete = False 
         self.killed_animation_playing = False 
+
+        self.can_vent = False 
         
         # TODO:not currently being used 
         self.animation_speed = 0.2 

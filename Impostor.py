@@ -120,6 +120,8 @@ class Monster(Sprite):
         self.monster_transform_list = monster_transform_list
         self.walk_right = walk_right 
         self.walk_left = walk_left 
+
+        self.can_vent = True 
         
         # when standing still and transformed
         self.stationary_monster = self.monster_transform_list[-1]
@@ -228,6 +230,10 @@ class Monster(Sprite):
                 self.monster = self.walk_left[self.current_frame] 
             else: 
                 self.monster = self.regular_imp_left[self.current_frame]  # type: ignore
+
+    #TODO: when venting, vent animation and sprite animation are seperate
+    def vent_animation(self): 
+        return 0
 
     def monster_move(self, keys): 
         self.is_moving = False

@@ -76,8 +76,11 @@ rooms = {
     "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": [HallwayBackToCaf, (23, 310)]}]
          } 
 
-# storing vent location coordinates with the name of their location to be used later 
+# vents need to map name of location of vent with the coordinates {cafeteria_vent: (x, y) }
 vents = {}
+
+# need to map vent names with who they're connected to {cafeteria_vent: admin_vent}
+vent_conections = {} 
 
 for table in tables: 
     caf_obstacles.append(table)
