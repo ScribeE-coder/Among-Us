@@ -16,6 +16,7 @@ class Vent:
         self.animation_playing = False
         self.current_animation_frame = 0 
         self.animation_frame_count = 0
+        self.room_name = ""
 
     # checking whether sprite can actually vent before animation plays 
     def open_vent_check(self, sprite): 

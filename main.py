@@ -107,10 +107,10 @@ for start, end in icon_bounds:
     frame = pygame.transform.scale(frame, (SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor))
     caf_vent_frames.append(frame)
 
-
 imp_venting_images = load_sequence('Venting', 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 caf_vent_img = caf_vent_frames[0]
 caf_vent = Vent(565, 379, SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor, window, caf_vent_frames)
+caf_vent.room_name = "cafeteria"
 vents = {"cafeteria": [caf_vent, imp_venting_images]}
 
 monster_imp.venting_info = vents 
@@ -122,7 +122,8 @@ def draw(imgs, xcor, ycor):
     for img in imgs: 
         window.blit(img, (xcor, ycor))
 
-    caf_vent.draw() 
+    if monster_imp.room == caf_vent.room_name and yellow_crew.room == caf_vent.room_name:
+        caf_vent.draw()
 
     if yellow_crew.room == curr_room_name and monster_imp.room == curr_room_name:
         yellow_crew.draw()
