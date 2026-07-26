@@ -87,8 +87,6 @@ test_imp.venting_info = vents
 test_imp.curr_room_name = curr_room_name
 test_imp.venting_animation_frames = test_imp.venting_info[test_imp.curr_room_name][1]
 
-vent_count = 0 
-
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))
@@ -115,7 +113,7 @@ while running:
         caf_vent.vent_animation()
         test_imp.vent_animation()
     else: 
-        # resetting everything so animation can play repeatedly 
+        # resetting everything so animation can play repeatedly (NECESSARY)
         caf_vent.animation_complete = False
         test_imp.venting_animation_complete = False 
         test_imp.venting_current_animation_frame = 0 

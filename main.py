@@ -8,6 +8,7 @@ from Obstacle import Circular_Obstacle, Rectangle_Obstacle
 from Impostor import Monster
 from image_loading import load_sequence
 from Ghost import Ghost
+from Vent import Vent 
 
 pygame.init()
 SCREEN_WIDTH = 640
@@ -50,6 +51,7 @@ centers = {"upper_right": (443, 180),
            }    
 
 table_radius = 50
+vent_divisor = 16.2
     
 yellow_crew = CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, caf_obstacles, window, crewDeadListy)
 yellow_crew.ghosty = stat_ghosty[0]
@@ -79,12 +81,6 @@ rooms = {
     "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": [HallwayBackToCaf, (23, 310)]}]
          } 
 
-# vents need to map name of location of vent with the coordinates {cafeteria_vent: (x, y) }
-vents = {}
-
-# need to map vent names with who they're connected to {cafeteria_vent: admin_vent}
-vent_conections = {} 
-
 for table in tables: 
     caf_obstacles.append(table)
 
@@ -98,10 +94,35 @@ tracker = 0
 curr_room = rooms["cafeteria"][0] 
 curr_room_name = "cafeteria"
 
+vent_animation_sheet = pygame.image.load("images/amongUsVent1.png") 
+frame_count = 8 # number of frames in the sprite sheet
+frame_width = vent_animation_sheet.get_width() // frame_count # getting width of individual sprite from sprite sheet 
+icon_bounds = [(11, 58), (70, 117), (129, 176), (187, 242), (252, 307), (318, 368), (380, 427)]
+frame_height = vent_animation_sheet.get_height()
+caf_vent_frames = [] # the frames needed for the animation cycle
+
+for start, end in icon_bounds: 
+    frame_rect = pygame.Rect(start, 0, end - start, frame_height)
+    frame = vent_animation_sheet.subsurface(frame_rect)
+    frame = pygame.transform.scale(frame, (SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor))
+    caf_vent_frames.append(frame)
+
+
+imp_venting_images = load_sequence('Venting', 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
+caf_vent_img = caf_vent_frames[0]
+caf_vent = Vent(565, 379, SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor, window, caf_vent_frames)
+vents = {"cafeteria": [caf_vent, imp_venting_images]}
+
+monster_imp.venting_info = vents 
+monster_imp.curr_room_name = curr_room_name 
+monster_imp.venting_animation_frames = monster_imp.venting_info[monster_imp.curr_room_name][1]
+
  # put your images on your created display    
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))
+
+    caf_vent.draw() 
 
     if yellow_crew.room == curr_room_name and monster_imp.room == curr_room_name:
         yellow_crew.draw()
@@ -182,6 +203,18 @@ while running:
 
             monster_imp.x = curr_hallways_available[curr_room_name][1][0]
             monster_imp.y = curr_hallways_available[curr_room_name][1][1]
+
+    if caf_vent.open_vent_check(monster_imp): 
+        caf_vent.vent_animation()
+        monster_imp.vent_animation()
+    else: 
+        caf_vent.animation_complete = False 
+        caf_vent.current_animation_frame = 0 
+        caf_vent.animation_frame_count = 0 
+
+        monster_imp.venting_animation_complete = False 
+        monster_imp.venting_current_animation_frame = 0 
+        monster_imp.venting_animation_frame_count = 0 
     
     window.fill((0, 0, 0))
     draw(curr_room, 0, 0)
