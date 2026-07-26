@@ -87,6 +87,8 @@ test_imp.venting_info = vents
 test_imp.curr_room_name = curr_room_name
 test_imp.venting_animation_frames = test_imp.venting_info[test_imp.curr_room_name][1]
 
+vent_count = 0 
+
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))
@@ -112,6 +114,14 @@ while running:
     if caf_vent.open_vent_check(test_imp): 
         caf_vent.vent_animation()
         test_imp.vent_animation()
+    else: 
+        # resetting everything so animation can play repeatedly 
+        caf_vent.animation_complete = False
+        test_imp.venting_animation_complete = False 
+        test_imp.venting_current_animation_frame = 0 
+        test_imp.venting_animation_frame_count = 0
+        caf_vent.current_animation_frame = 0 
+        caf_vent.animation_frame_count = 0 
 
     pygame.display.update() 
     clock.tick(60)

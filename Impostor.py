@@ -245,16 +245,18 @@ class Monster(Sprite):
         else: 
             self.venting_animation_playing = True 
             now = pygame.time.get_ticks() 
-            if now - self.venting_last_update > 100: 
+
+            if now - self.venting_last_update > 30: 
                 self.venting_last_update = now 
                 self.venting_current_animation_frame = (self.venting_current_animation_frame + 1) % len(self.venting_animation_frames)
                 self.venting_animation_frame_count += 1 
 
-                self.monster = self.venting_animation_frames[self.venting_current_animation_frame]
+                self.venting_img = self.venting_animation_frames[self.venting_current_animation_frame]
 
             if self.venting_animation_frame_count >= len(self.venting_animation_frames): 
                 self.venting_animation_complete = True 
                 self.venting_animation_playing = False 
+                self.venting_img = self.monster
 
         return 
 
@@ -369,7 +371,7 @@ class Monster(Sprite):
     def draw(self): 
         if self.venting_animation_playing: 
             vent = self.venting_info[self.curr_room_name][0]
-            self.window.blit(self.monster, (vent.x, vent.y))
+            self.window.blit(self.venting_img, (vent.x, vent.y - 25))
         else: 
             self.window.blit(self.monster, (self.x, self.y))
         return None 
