@@ -7,6 +7,7 @@ class ShapeShifter:
         self.y = y 
         self.width = width 
         self.height = height 
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
         self.window = window 
         self.walk_right = walk_right 
         self.walk_left = walk_left 

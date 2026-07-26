@@ -14,6 +14,7 @@ pygame.init()
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 640 
 divisor = 15 
+vent_divisor = 16.2
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Among Us Clone")
@@ -51,7 +52,6 @@ centers = {"upper_right": (443, 180),
            }    
 
 table_radius = 50
-vent_divisor = 16.2
     
 yellow_crew = CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, caf_obstacles, window, crewDeadListy)
 yellow_crew.ghosty = stat_ghosty[0]
@@ -154,6 +154,7 @@ while running:
                 monster_imp.current_animation_frame = 0
                 monster_imp.animation_frame_count = 0   
 
+            # without the isinstance check, monster is allowed to attack crew ghost and it causes issues in the loop
             if event.key == pygame.K_0 and not isinstance(yellow_crew, Ghost):
                 if monster_imp.animation_complete:
                     monster_imp.monster_attack_frame_count = 0

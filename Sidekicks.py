@@ -3,20 +3,20 @@ from image_loading import load_sequence
 
 pygame.init() 
 
-SCREEN_WIDTH = 640 
-SCREEN_HEIGHT = 640 
+class Sidekick(): 
+    def __init__(self, img, x, y, width, height, main, window):
+        self.img = img 
+        self.x = x 
+        self.y = y 
+        self.width = width 
+        self.height = height 
+        self.main = main
+        self.window = window
 
-window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-clock = pygame.time.Clock() 
+    def move(self): 
+        main.x 
+        return 
 
-
-
-
-running = True 
-while running: 
-    for event in pygame.event.get(): 
-        if event.type == pygame.QUIT: 
-            running = False 
-
-    pygame.display.update()
-    clock.tick(60)
+    def draw(self):
+        self.window.blit(self.img, (self.x, self.y))
+        return 
