@@ -152,9 +152,9 @@ while running:
                 monster_imp.animation_complete = False
                 monster_imp.animation_playing = True
                 monster_imp.current_animation_frame = 0
-                monster_imp.animation_frame_count = 0
+                monster_imp.animation_frame_count = 0   
 
-            if event.key == pygame.K_0:
+            if event.key == pygame.K_0 and not isinstance(yellow_crew, Ghost):
                 if monster_imp.animation_complete:
                     monster_imp.monster_attack_frame_count = 0
                     monster_imp.attacking = True 

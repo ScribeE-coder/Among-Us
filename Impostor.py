@@ -1,6 +1,7 @@
 import pygame, CrewMate, Sprite
 
 from Sprite import Sprite
+from Ghost import Ghost 
 
 # walking right and left defaulted to None for now working on monster transform
 class Impostor(Sprite): 
@@ -313,7 +314,7 @@ class Monster(Sprite):
         elif not self.is_moving and not self.animation_complete: 
             self.monster = self.stationary_imp      
 
-    def attack_animation(self, crew): 
+    def attack_animation(self, crew):
         now = pygame.time.get_ticks() 
 
         if now - self.last_update > 100: 
@@ -336,7 +337,6 @@ class Monster(Sprite):
             self.attack_complete = True 
             self.attacking = False
             self.kill_landed = crew.kill_distance_check(self) # checking whether imp actually killed someone while animation played not after 
-            print(self.kill_landed)
             self.monster = self.stationary_monster
         return
 
