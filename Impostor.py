@@ -92,10 +92,6 @@ class Impostor(Sprite):
     
     def vent_animation(self): 
         raise NotImplementedError
-
-    # TODO: all imps and engineers should be able to vent 
-    def vent(self): 
-        raise NotImplementedError
     
     # TODO: if close to crewmate, kill mechanism otherwise do nothing, will have countdown mechanism 
     def kill(self, crew): 
@@ -121,7 +117,17 @@ class Monster(Sprite):
         self.walk_right = walk_right 
         self.walk_left = walk_left 
 
-        self.can_vent = True 
+        self.can_vent = True
+        self.venting_info = {}
+        self.venting_animation_frames = []
+        self.curr_room_name = ""
+
+        self.venting_animation_complete = False 
+        self.venting_animation_playing = False
+        self.venting_current_animation_frame = 0 
+        self.venting_animation_frame_count = 0 
+        self.venting_img = self.monster
+        self.venting_last_update = pygame.time.get_ticks() 
         
         # when standing still and transformed
         self.stationary_monster = self.monster_transform_list[-1]
@@ -231,9 +237,27 @@ class Monster(Sprite):
             else: 
                 self.monster = self.regular_imp_left[self.current_frame]  # type: ignore
 
-    #TODO: when venting, vent animation and sprite animation are seperate
     def vent_animation(self): 
-        return 0
+        if not self.can_vent: 
+            return 
+        elif self.venting_animation_complete: 
+            return 
+        else: 
+            self.venting_animation_playing = True 
+            now = pygame.time.get_ticks() 
+            if now - self.venting_last_update > 100: 
+                self.venting_last_update = now 
+                self.venting_current_animation_frame = (self.venting_current_animation_frame + 1) % len(self.venting_animation_frames)
+                self.venting_animation_frame_count += 1 
+
+                self.monster = self.venting_animation_frames[self.venting_current_animation_frame]
+
+            if self.venting_animation_frame_count >= len(self.venting_animation_frames): 
+                self.venting_animation_complete = True 
+                self.venting_animation_playing = False 
+
+        return 
+
 
     def monster_move(self, keys): 
         self.is_moving = False
@@ -343,5 +367,9 @@ class Monster(Sprite):
             return False 
 
     def draw(self): 
-        self.window.blit(self.monster, (self.x, self.y))
+        if self.venting_animation_playing: 
+            vent = self.venting_info[self.curr_room_name][0]
+            self.window.blit(self.monster, (vent.x, vent.y))
+        else: 
+            self.window.blit(self.monster, (self.x, self.y))
         return None 

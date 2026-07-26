@@ -1,16 +1,19 @@
+import sys, os 
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 import pygame 
 from image_loading import load_sequence 
 from CrewMate import CrewMate 
 from Obstacle import Obstacle, Rectangle_Obstacle, Circular_Obstacle, Sprite_Obstacle 
 from Impostor import Monster 
-from Vent import Vent 
+from Vent import Vent
 
 pygame.init() 
 
 SCREEN_WIDTH = 640 
 SCREEN_HEIGHT = 640 
 divisor = 15
-vent_divisor = 10.5
+vent_divisor = 16.2
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 clock = pygame.time.Clock()
@@ -23,20 +26,22 @@ test_imp_walking_right_imgs = load_sequence('crewWalk', 7, SCREEN_WIDTH/divisor,
 test_imp_walking_left_imgs = [pygame.transform.flip(sprite, True, False) for sprite in test_imp_walking_right_imgs] 
 test_imp_transform_imgs = load_sequence("impTransform", 13, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
-
 # loading in vent sprite sheet and splitting to get individual images 
 vent_animation_sheet = pygame.image.load("images/amongUsVent1.png") 
-frame_count = 7 # number of frames needed from sprite sheet
-frame_width = vent_animation_sheet.get_width() // frame_count 
-frame_height = vent_animation_sheet.get_height() 
-vent_frames = []
+frame_count = 8 # number of frames in the sprite sheet
+frame_width = vent_animation_sheet.get_width() // frame_count # getting width of individual sprite from sprite sheet 
+icon_bounds = [(11, 58), (70, 117), (129, 176), (187, 242), (252, 307), (318, 368), (380, 427)]
+frame_height = vent_animation_sheet.get_height()
+caf_vent_frames = [] # the frames needed for the animation cycle
 
-for i in range(frame_count): 
-    x_offset = i * frame_width # walking across sprite sheet 
-    frame_rect = pygame.Rect(x_offset, 0, frame_width, frame_height)
+for start, end in icon_bounds: 
+    frame_rect = pygame.Rect(start, 0, end - start, frame_height)
     frame = vent_animation_sheet.subsurface(frame_rect)
     frame = pygame.transform.scale(frame, (SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor))
-    vent_frames.append(frame)
+    caf_vent_frames.append(frame)
+
+
+imp_venting_images = load_sequence('Venting', 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
 
 table_radius = 50 
 
@@ -60,6 +65,11 @@ doorToStorageHallway = Rectangle_Obstacle(290, 625, 65, 30)
 doortoAsteroidsHallway = Rectangle_Obstacle(629, 285, 65, 60)
 HallwayBackToCaf = Rectangle_Obstacle(626, 301, 65, 30)
 
+caf_vent_img = caf_vent_frames[0]
+caf_vent = Vent(565, 379, SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor, window, caf_vent_frames)
+
+vents = {"cafeteria": [caf_vent, imp_venting_images]}
+
 rooms = {
     "cafeteria": [cafeteria_imgs, tables, {"caf_upperE_medbay_hallway": [doorToMedBayHallway, (550, 310)]}], 
     
@@ -73,14 +83,17 @@ test_imp.regular_imp_right = test_imp_walking_right_imgs
 curr_room_img = rooms["cafeteria"][0]
 curr_room_name = "cafeteria"
 
-caf_vent_img = vent_frames[0]
-caf_vent = Vent(565, 379, SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor, window)
+test_imp.venting_info = vents
+test_imp.curr_room_name = curr_room_name
+test_imp.venting_animation_frames = test_imp.venting_info[test_imp.curr_room_name][1]
 
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))
+
     window.blit(caf_vent_img, (565, 379))
     test_imp.draw()
+    caf_vent.draw()
 
 running = True 
 while running: 
@@ -93,11 +106,12 @@ while running:
             print(pos)
 
     window.fill((0, 0, 0))
-    draw(curr_room_img, 0, 0)
     test_imp.monster_move(keys)
+    draw(curr_room_img, 0, 0)
 
     if caf_vent.open_vent_check(test_imp): 
         caf_vent.vent_animation()
+        test_imp.vent_animation()
 
     pygame.display.update() 
     clock.tick(60)
