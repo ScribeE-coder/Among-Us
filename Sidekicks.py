@@ -1,20 +1,21 @@
 import pygame 
-from image_loading import load_sequence
 
 pygame.init() 
 
 class Sidekick(): 
-    def __init__(self, img, x, y, width, height, main, window):
+    def __init__(self, img, x, y, width, height, master, window):
         self.img = img 
         self.x = x 
         self.y = y 
         self.width = width 
         self.height = height 
-        self.main = main
+        self.master = master 
         self.window = window
 
     def move(self): 
-        main.x 
+        offset = 3 
+        self.x = self.master.x - offset 
+        self.y = self.master.y - offset
         return 
 
     def draw(self):
