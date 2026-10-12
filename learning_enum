@@ -1,0 +1,22 @@
+from enum import Enum 
+
+"""Enum allows you to store different constant values and tie them to a specific class (states of the instance of that class)"""
+
+class crewMate(): 
+    def __init__(self, color, x, y): 
+        self.color = color 
+        self.x = x 
+        self.y = y 
+        self.curr_state = crewMateState.ANIMATION_PLAYING
+        self.curr_hallways_available = crewMateState.CURR_HALLWAYS_AVAILABLE
+
+class crewMateState(Enum): 
+    CURR_HALLWAYS_AVAILABLE = ["cafe", "medbay", "weapons"]
+    ANIMATION_PLAYING = False 
+    ANIMATION_COMPLETE = False 
+
+
+yellow_crew = crewMate("yellow", 0, 0) 
+print(yellow_crew.curr_state)
+print(yellow_crew.curr_hallways_available.value)
+

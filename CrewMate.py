@@ -1,6 +1,6 @@
 import pygame, math, Sprite
-
 from Sprite import Sprite
+from enum import Enum
 
 class CrewMate(Sprite): 
     def __init__(self, img, x, y, width, height, walk_right, walk_left, obstacles, window, dead_listy): 
@@ -47,7 +47,6 @@ class CrewMate(Sprite):
         self.killed_last_update = pygame.time.get_ticks()
 
         # direction tracking
-        self.direction = None 
         self.is_moving = False 
 
         self.obstacles = obstacles 
@@ -103,25 +102,25 @@ class CrewMate(Sprite):
         if keys[pygame.K_w]:
             # move upwards 
             self.y -= self.speed
-            self.direction = "up"
+            self.direction = Direction.UP.value
             self.is_moving = True 
        
         if keys[pygame.K_a]: 
             # move to the left 
             self.x -= self.speed 
-            self.direction = "left"
+            self.direction = Direction.LEFT.value
             self.is_moving = True 
         
         if keys[pygame.K_s]: 
             #move downwards 
             self.y += self.speed
-            self.direction = "down"
+            self.direction = Direction.DOWN.value
             self.is_moving = True 
         
         if keys[pygame.K_d]:  
             #move to the right
             self.x += self.speed
-            self.direction = "right"
+            self.direction = Direction.RIGHT.value
             self.is_moving = True   
 
         # updating rectangle with new coordinates after movement 
@@ -160,10 +159,8 @@ class CrewMate(Sprite):
         self.killed_animation_list = listy 
         return None 
     
-    # TODO: add tasks to crew 
-    def add_tasks(self, task): 
-        self.tasks.append(task)
-        return self.tasks 
+    def create_tasks(self): # create and store tasks for each crewmate 
+        return None 
     
     # TODO: displaying current tasks on screen
     def display_tasks(self): 
@@ -209,4 +206,14 @@ class CrewMate(Sprite):
         
     def draw(self):
        self.window.blit(self.crew, (self.x, self.y))
-       return None 
+       return None    
+
+class Direction(Enum): 
+    RIGHT = "right"
+    LEFT = "left"
+    UP = "up"
+    DOWN = "down"
+
+
+
+

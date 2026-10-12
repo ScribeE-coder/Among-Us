@@ -80,7 +80,7 @@ class Ghost(Sprite):
         self.center_x = self.x + self.width / 2 
         self.center_y = self.y + self.height / 2
 
-        # updating animation 
+        # updating animation via indexing to get current frame and storing in a variable for draw function
         self.ghost_animation() 
 
         return None 

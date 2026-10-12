@@ -58,14 +58,14 @@ yellow_crew.ghosty = stat_ghosty[0]
 
 monster_imp = Monster(monsterTransformList[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monsterTransformList, window, monster_walk_right, monster_walk_left)
 monster_imp.monster_attack_list = monsterAttackCycle
-monster_imp.regular_imp_left = crew_walking_left # type: ignore
-monster_imp.regular_imp_right = crew_walking_right # type: ignore
+monster_imp.regular_imp_left = crew_walking_left
+monster_imp.regular_imp_right = crew_walking_right
 
-upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius) # type: ignore
-emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius)  # type: ignore
-upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius) # type: ignore
-bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius)  # type: ignore
-bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius)  # type: ignore
+upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
+emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius)  
+upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius) 
+bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
+bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius)  
 
 tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
 
@@ -95,9 +95,9 @@ curr_room = rooms["cafeteria"][0]
 curr_room_name = "cafeteria"
 
 vent_animation_sheet = pygame.image.load("images/amongUsVent1.png") 
-frame_count = 8 # number of frames in the sprite sheet
+frame_count = 8 # number of frames in the vent animation sprite sheet
 frame_width = vent_animation_sheet.get_width() // frame_count # getting width of individual sprite from sprite sheet 
-icon_bounds = [(11, 58), (70, 117), (129, 176), (187, 242), (252, 307), (318, 368), (380, 427)]
+icon_bounds = [(11, 58), (70, 117), (129, 176), (187, 242), (252, 307), (318, 368), (380, 427)] #coordinates for where each vent sprite is on sprite sheet
 frame_height = vent_animation_sheet.get_height()
 caf_vent_frames = [] # the frames needed for the animation cycle
 
