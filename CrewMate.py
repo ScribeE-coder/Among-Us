@@ -85,8 +85,9 @@ class CrewMate(Sprite):
             self.crew = self.walk_left[self.current_frame]
     
     def collision_check(self, obstacles): # type: ignore
-        if not obstacles: 
+        if not obstacles or type(obstacles) != list: 
             return False 
+        
         for obstacle in obstacles: 
             colliding = obstacle.check_collision(self)  
             # if im colliding with an object then you don't need to check for the other objects 

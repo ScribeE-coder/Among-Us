@@ -2,72 +2,35 @@ import sys, os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame, math, os
-import Impostor 
 from CrewMate import CrewMate 
 from Obstacle import Circular_Obstacle, Rectangle_Obstacle
 from Impostor import Monster
-from image_loading import load_sequence
 from Ghost import Ghost
 from Vent import Vent 
+import assets 
 
 pygame.init()
+
 SCREEN_WIDTH = 640
 SCREEN_HEIGHT = 640 
-divisor = 15 
-vent_divisor = 16.2
+SPRITE_DIVISOR = 15 
+VENT_SPRITE_SHEET_DIVISOR = 16.2
+SCREEN_WIDTH_DIVISOR = 17 
+SCREEN_HEIGHT_DIVISOR = 17 
 
-window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Among Us Clone")
+
+# setting up the window users will see when they play the game
+window = assets.window
+pygame.display.set_caption("Among Us Clone") # can remove bc of assets 
 clock = pygame.time.Clock()
 
-cafeteria = load_sequence("amongUs_cafeteria", 1, SCREEN_WIDTH, SCREEN_HEIGHT) 
-idle_crew = load_sequence("idle", 1, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-crew_walking_right = load_sequence("crewWalk", 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
-crew_walking_left = [pygame.transform.flip(sprite, True, False) for sprite in crew_walking_right]
-
-monsterTransformList = load_sequence("impTransform", 13, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-monster_walk_right = load_sequence("monsterWalk", 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-monster_walk_left = [pygame.transform.flip(sprite, True, False) for sprite in monster_walk_right]
-
-monsterAttackCycle = load_sequence("monsterAttack", 12, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-crewDeadListy = load_sequence("crewDead", 9, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-ghost_listy_right = load_sequence("ghost", 16, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor) 
-ghost_listy_left = [pygame.transform.flip(sprite, True, False) for sprite in ghost_listy_right]
-
-stat_ghosty = load_sequence("stationary_ghost", 1, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-
-cafeteriaUpperEMedbayHallway1 = load_sequence("cafeteriaUpperEMedbayHallway", 1, SCREEN_WIDTH, SCREEN_HEIGHT)
-
-caf_obstacles = [] 
-
-centers = {"upper_right": (443, 180), 
-           "emergency": (312, 332),
-           "upper_left": (173, 182), 
-           "bottom_right": (444, 474),
-           "bottom_left": (175, 473)
-           }    
-
-table_radius = 50
-    
-yellow_crew = CrewMate(idle_crew[0], 320, 250, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, crew_walking_right, crew_walking_left, caf_obstacles, window, crewDeadListy)
-yellow_crew.ghosty = stat_ghosty[0]
-
-monster_imp = Monster(monsterTransformList[0], 350, 255, SCREEN_WIDTH/17, SCREEN_HEIGHT/17, monsterTransformList, window, monster_walk_right, monster_walk_left)
-monster_imp.monster_attack_list = monsterAttackCycle
-monster_imp.regular_imp_left = crew_walking_left
-monster_imp.regular_imp_right = crew_walking_right
-
-upper_right_table = Circular_Obstacle(centers.get("upper_right")[0], centers.get("upper_right")[1], table_radius)
-emergency_table = Circular_Obstacle(centers.get("emergency")[0], centers.get("emergency")[1], table_radius)  
-upper_left_table = Circular_Obstacle(centers.get("upper_left")[0], centers.get("upper_left")[1], table_radius) 
-bottom_right_table = Circular_Obstacle(centers.get("bottom_right")[0], centers.get("bottom_right")[1], table_radius) 
-bottom_left_table = Circular_Obstacle(centers.get("bottom_left")[0], centers.get("bottom_left")[1], table_radius)  
-
-tables = [upper_right_table, emergency_table, upper_left_table, bottom_right_table, bottom_left_table]  
+caf_obstacles = assets.caf_obstacles
+yellow_crew = assets.characters["yellow_crew"]
+monster_imp = assets.characters["monster_imp"]
+caf_vent = assets.vents["cafeteria"]
+ghost_listy_right = assets.sprite_imgs["ghost_move_right_sheet"]
+ghost_listy_left = assets.sprite_imgs["ghost_move_left_sheet"]
+vent_animation_sheet = assets.sprite_imgs["vent_animation_sheet"]
 
 doorToMedBayHallway = Rectangle_Obstacle(-20, 295, 35, 50)
 doorToStorageHallway = Rectangle_Obstacle(290, 625, 65, 30)
@@ -76,48 +39,25 @@ HallwayBackToCaf = Rectangle_Obstacle(626, 301, 65, 30)
 
 # TODO: add the rest of the rooms and hallways once you get all the images for this map
 rooms = {
-    "cafeteria": [cafeteria, tables, {"caf_upperE_medbay_hallway": [doorToMedBayHallway, (550, 310)]}], 
+    "cafeteria": [assets.sprite_imgs["cafeteria"], caf_obstacles, {"caf_upperE_medbay_hallway": [doorToMedBayHallway, (550, 310)]}], 
     
-    "caf_upperE_medbay_hallway": [cafeteriaUpperEMedbayHallway1, None, {"cafeteria": [HallwayBackToCaf, (23, 310)]}]
+    "caf_upperE_medbay_hallway": [assets.sprite_imgs["caf_upper_eng_Hallway1"], None, {"cafeteria": [HallwayBackToCaf, (23, 310)]}]
          } 
 
-for table in tables: 
-    caf_obstacles.append(table)
-
-# rectangular obstacles 
+# creating rectangle obstacles for easier way to detect collisions 
 caf_rect_obstacle = Rectangle_Obstacle(128, 50, 340, 1)
 caf_obstacles.append(caf_rect_obstacle)
 
 monster_imp.obstacles = caf_obstacles
-tracker = 0 
 
 curr_room = rooms["cafeteria"][0] 
 curr_room_name = "cafeteria"
 
-vent_animation_sheet = pygame.image.load("images/amongUsVent1.png") 
-frame_count = 8 # number of frames in the vent animation sprite sheet
-frame_width = vent_animation_sheet.get_width() // frame_count # getting width of individual sprite from sprite sheet 
-icon_bounds = [(11, 58), (70, 117), (129, 176), (187, 242), (252, 307), (318, 368), (380, 427)] #coordinates for where each vent sprite is on sprite sheet
-frame_height = vent_animation_sheet.get_height()
-caf_vent_frames = [] # the frames needed for the animation cycle
+monster_imp.venting_info = {"cafeteria": [caf_vent, assets.sprite_imgs["imp_venting_image_sheet"]]}
+monster_imp.curr_room_name = curr_room_name
+monster_imp.venting_animation_frames = monster_imp.venting_info[curr_room_name][1]
 
-for start, end in icon_bounds: 
-    frame_rect = pygame.Rect(start, 0, end - start, frame_height)
-    frame = vent_animation_sheet.subsurface(frame_rect)
-    frame = pygame.transform.scale(frame, (SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor))
-    caf_vent_frames.append(frame)
-
-imp_venting_images = load_sequence('Venting', 7, SCREEN_WIDTH/divisor, SCREEN_HEIGHT/divisor)
-caf_vent_img = caf_vent_frames[0]
-caf_vent = Vent(565, 379, SCREEN_WIDTH/vent_divisor, SCREEN_HEIGHT/vent_divisor, window, caf_vent_frames)
-caf_vent.room_name = "cafeteria"
-vents = {"cafeteria": [caf_vent, imp_venting_images]}
-
-monster_imp.venting_info = vents 
-monster_imp.curr_room_name = curr_room_name 
-monster_imp.venting_animation_frames = monster_imp.venting_info[monster_imp.curr_room_name][1]
-
- # put your images on your created display    
+"""COMMENT TO EXPLAIN WHY STRUCTURED LIKE THIS""" 
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))

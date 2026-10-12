@@ -1,6 +1,7 @@
 import pygame, Sprite, CrewMate
 
 from Sprite import Sprite 
+from enum import Enum
 
 """ Ghost class will need to be general enough to apply to both crew and imps"""
 
@@ -106,3 +107,9 @@ class Ghost(Sprite):
     def draw(self): 
         self.window.blit(self.img, (self.x, self.y))
         return None 
+    
+class Direction(Enum): 
+    RIGHT = "right"
+    LEFT = "left"
+    UP = "up"
+    DOWN = "down"

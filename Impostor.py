@@ -103,8 +103,8 @@ class Impostor(Sprite):
         self.window.blit(self.imp, (self.x, self.y)) 
 
 class Monster(Sprite): 
-    def __init__(self, monster_img, x, y, width, height, monster_transform_list, window, walk_right, walk_left, speed=2): 
-        self.monster = monster_img 
+    def __init__(self, x, y, width, height, monster_transform_list, window, walk_right, walk_left, speed=2): 
+        self.monster = monster_transform_list[0]
         self.x = x
         self.y = y 
         self.width = width 
