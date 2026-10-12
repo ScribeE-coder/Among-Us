@@ -57,7 +57,8 @@ monster_imp.venting_info = {"cafeteria": [caf_vent, assets.sprite_imgs["imp_vent
 monster_imp.curr_room_name = curr_room_name
 monster_imp.venting_animation_frames = monster_imp.venting_info[curr_room_name][1]
 
-"""COMMENT TO EXPLAIN WHY STRUCTURED LIKE THIS""" 
+"""Draws the cafeteria initally when starting up, but checks which room imps and crew are in in order to know who to draw.
+For example, there's no need to draw crew if only imp has moved to another room and vice versa.""" 
 def draw(imgs, xcor, ycor): 
     for img in imgs: 
         window.blit(img, (xcor, ycor))
