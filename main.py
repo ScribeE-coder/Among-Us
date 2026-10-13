@@ -11,17 +11,8 @@ import assets
 
 pygame.init()
 
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 640 
-SPRITE_DIVISOR = 15 
-VENT_SPRITE_SHEET_DIVISOR = 16.2
-SCREEN_WIDTH_DIVISOR = 17 
-SCREEN_HEIGHT_DIVISOR = 17 
-
-
 # setting up the window users will see when they play the game
 window = assets.window
-pygame.display.set_caption("Among Us Clone") # can remove bc of assets 
 clock = pygame.time.Clock()
 
 caf_obstacles = assets.caf_obstacles
@@ -74,7 +65,7 @@ def draw(imgs, xcor, ycor):
         yellow_crew.draw() 
 
     elif monster_imp.room == curr_room_name: 
-        monster_imp.draw()  
+        monster_imp.draw() # there's a bug when both crew and imp go to medbay hallway 
 
 running = True 
 while running: 
@@ -106,9 +97,8 @@ while running:
     if monster_imp.attacking: 
         monster_imp.attack(yellow_crew)
 
-    # only update animation when cycle has started again 
-    if monster_imp.animation_playing:
-        monster_imp.monster_transform() # calls monster animation function
+    if monster_imp.animation_playing: # variable that keeps track of whether the correct key has been pressed to transform the regular imp into a monster
+        monster_imp.monster_transform()
    
     elif not monster_imp.animation_playing and not monster_imp.attacking:
         monster_imp.monster_move(keys)

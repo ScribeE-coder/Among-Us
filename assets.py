@@ -15,7 +15,10 @@ SCREEN_WIDTH_DIVISOR = 17
 SCREEN_HEIGHT_DIVISOR = 17 
 
 window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+pygame.display.set_caption("Among Us Clone")
 
+"""Instead of loading in sprites this way, it would probably be better to have a global dictionary, and then add parameters to the funciton
+that can just be passed into the function itself; flipping can be split into a separate function, vent animation sheet can be its own thing"""
 def load_sprites(): 
     cafeteria = load_sequence("amongUs_cafeteria", 1, SCREEN_WIDTH, SCREEN_HEIGHT) 
     idle_crew = load_sequence("idle", 1, SCREEN_WIDTH/SPRITE_DIVISOR, SCREEN_HEIGHT/SPRITE_DIVISOR)
@@ -63,7 +66,6 @@ def load_sprites():
 
 sprite_imgs = load_sprites()
 
-
 def create_obstacles():
     table_radius = 50
     centers = {
@@ -75,13 +77,11 @@ def create_obstacles():
     }
     return {name: Circular_Obstacle(x, y, table_radius) for name, (x, y) in centers.items()}
 
-
 obstacles = create_obstacles()
 
-# CrewMate and Monster need a list, not a dict
+# CrewMate and Monster need a list for collision detection, easier to type cast into a list vs. restructuring both classes
 caf_obstacles = list(obstacles.values())
 caf_obstacles.append(Rectangle_Obstacle(128, 50, 340, 1))
-
 
 def create_characters():
     yellow_crew = CrewMate(sprite_imgs["idle_crew"][0], 320, 250, SCREEN_WIDTH/SCREEN_WIDTH_DIVISOR, SCREEN_HEIGHT/SCREEN_HEIGHT_DIVISOR, sprite_imgs["crew_walking_right_sheet"], sprite_imgs["crew_walking_left_sheet"], caf_obstacles, window, sprite_imgs["crew_dead_listy"])
@@ -94,9 +94,7 @@ def create_characters():
 
     return {"yellow_crew": yellow_crew, "monster_imp": monster_imp}
 
-
 characters = create_characters()
-
 
 def create_vent_animation_frames():
     sheet = sprite_imgs["vent_animation_sheet"]
@@ -109,14 +107,11 @@ def create_vent_animation_frames():
         frames.append(frame)
     return frames
 
-
 caf_vent_animation_frames = create_vent_animation_frames()
-
 
 def create_vents():
     caf_vent = Vent(565, 379, SCREEN_WIDTH / VENT_SPRITE_SHEET_DIVISOR, SCREEN_HEIGHT / VENT_SPRITE_SHEET_DIVISOR, window, caf_vent_animation_frames)
     caf_vent.room_name = "cafeteria"
     return {caf_vent.room_name: caf_vent}
-
 
 vents = create_vents()
